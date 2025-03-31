@@ -1,0 +1,14 @@
+# Exclure les fichiers temporaires
+*.swp
+*.swo
+
+# Ignorer les fichiers du système
+.DS_Store
+Thumbs.db
+
+# Exclure les logs & fichiers inutiles
+logs/
+*.log
+
+# Exclure les certificats si déjà générés (on peut les créer dynamiquement)
+conf/certs/

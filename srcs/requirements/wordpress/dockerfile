@@ -1,0 +1,13 @@
+FROM debian:latest
+
+RUN APT update && apt install -y php-fpm php-mysql wget unzip
+
+RUN mkdir -p /var/www/html \
+	&& wget -q https:///wordpress.org/latest.tar.gz -O /tmp/wordpress.tar.gz \
+	&& tar -xzf /tmp/wordpress.tar.gz -C /var/www/html --strip-components=1
+
+COPY conf/wp-config.php /var/www/html/wp-config.php
+
+CMD ["php-fpm", "-F"]
+
+ENTRYPOINT [ "./tools/entrypoint.sh" ]

@@ -1,5 +1,5 @@
 # Ignorer les fichiers de configuration sensibles
-conf/setup.sql
+conf/wp-config.php
 
 # Exclure les fichiers du système
 .DS_Store
@@ -13,5 +13,5 @@ logs/
 *.swp
 *.swo
 
-# Exclure les fichiers volumineux de la base de données (si présents)
-data/
+# Ignorer les fichiers téléchargés (inutile dans l’image)
+wp-content/uploads/

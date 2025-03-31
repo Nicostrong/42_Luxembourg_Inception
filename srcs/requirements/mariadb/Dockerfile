@@ -1,13 +1,9 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Dockerfile                                         :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/03/12 08:58:17 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/03/12 08:58:18 by nfordoxc         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+FROM alpine:latest
 
+RUN apk update && apk add --no-cache mariadb mariadb-server
 
+COPY conf/setup.sql /docker-entrypoint-initdb.d/setup.sql
+
+CMD ["mysqld"]
+
+ENTRYPOINT [ "./tools/entrypoint.sh" ]

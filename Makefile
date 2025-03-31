@@ -6,39 +6,51 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/31 07:43:50 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/03/31 07:45:09 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/03/31 17:26:54 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
-# Nom du fichier Docker Compose
+#	Name of the file docker-compose
 DOCKER_COMPOSE_FILE = docker-compose.yml
 
-# Cibles
-.PHONY: up down logs ps build restart clean
+#	Cibles
+.PHONY: up down logs ps build restart clean prune init
 
-# Lancer les conteneurs en arrière-plan
-up:
-    docker-compose -f $(DOCKER_COMPOSE_FILE) up -d
+#	Check if docker is installed
+init:
+	@which docker > /dev/null 2>&1 || (echo "Docker isn't installed!!" && exit 1)
+	@which docker-compose > /dev/null 2>&1 || (echo "Docker Compose isn't installed!!" && exit 1)
+	@echo "✅	Docker and Docker Compose are installed."
 
-# Arrêter les conteneurs
+
+#	run the docker-compose in back-ground
+up:			init
+	docker-compose -f $(DOCKER_COMPOSE_FILE) up -d
+
+#	Stop all containers
 down:
-    docker-compose -f $(DOCKER_COMPOSE_FILE) down
+	docker-compose -f $(DOCKER_COMPOSE_FILE) down
 
-# Construire ou reconstruire les images Docker
+#	build or rebuild the containers
 build:
-    docker-compose -f $(DOCKER_COMPOSE_FILE) build
+	docker-compose -f $(DOCKER_COMPOSE_FILE) build
 
-# Afficher les logs en continu
+#	Show all logs of the containers
 logs:
-    docker-compose -f $(DOCKER_COMPOSE_FILE) logs -f
+	docker-compose -f $(DOCKER_COMPOSE_FILE) logs -f
 
-# Afficher l'état des conteneurs
+#	show the statement of all containers
 ps:
-    docker-compose -f $(DOCKER_COMPOSE_FILE) ps
+	docker-compose -f $(DOCKER_COMPOSE_FILE) ps
 
-# Redémarrer les conteneurs
-restart: down up
+#	restart all containers
+restart:	down up
 
-# Nettoyer les volumes et les réseaux
+#	Clean all volumes and networks
 clean:
-    docker-compose -f $(DOCKER_COMPOSE_FILE) down -v
+	docker-compose -f $(DOCKER_COMPOSE_FILE) down -v
+
+#	Delete all volumes and networks
+prune:
+	docker system prune -a --volumes -f
+	@echo "✅	All unused volumes and networks have been deleted."
