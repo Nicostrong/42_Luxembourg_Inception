@@ -1,0 +1,26 @@
+INCEPTION
+
+1/	installer docker et docker-compose
+2/	planifier l'architecture du projet
+3/	configurer des conteneurs
+4/	creer un certificat ssl auto-signe pour securiser les connexions
+5/	configurer wordpress et maria db
+6/	ajouter Redis et ftp
+7/	ajouter netdata
+8/	tester
+
+
+9/	Listes des containers:
+	a:	NGINX + TSLv1.2 ou V&."
+	b:	WordPress + php-fpm (sans Nginx)
+	c:	MariaDB (sans Ngnix)
+
+10/	listes des volumes:
+	a:	base de donne pour wordpress
+	b:	fichiers pour wordpress
+
+	=> emplacements des volumes => /home/nfordoxc/data
+
+11/	un docker-network pour lier le tout
+
+=> nom de domaine wordpress => nfordoxc.42.fr

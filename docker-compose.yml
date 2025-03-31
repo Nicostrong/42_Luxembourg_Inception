@@ -1,0 +1,13 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/nginx.conf
+    networks:
+      - inception_network
+
+networks:
+  inception_network:
+    driver: bridge
