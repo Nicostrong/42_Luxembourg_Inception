@@ -1,7 +1,12 @@
 #!/bin/bash
 
-service mariadb start
+export MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
+export MYSQL_PASSWORD=$(cat /run/secrets/db_password)
 
-sh ./setup_mariadb.sh
+mysqld_safe --skip-networking &
+sleep 5
 
-exec tail -f /dev/null
+sh /setup_mariadb.sh
+
+mysqladmin -u root -p"$MYSQL_ROOT_PASSWORD" shutdown
+exec mysqld_safe

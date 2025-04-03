@@ -1,0 +1,3 @@
+faire
+docker-compose config
+verifier que les secret sont bien inclus

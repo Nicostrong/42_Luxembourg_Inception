@@ -1,13 +1,16 @@
-FROM debian:latest
+FROM alpine:latest
 
-RUN APT update && apt install -y php-fpm php-mysql wget unzip
+RUN apk update && apk add --no-cache \
+	php8 php8-fpm php8-mysqli php8-json php8-mbstring php8-xml \
+	curl mysql-client bash sudo wget vim
 
-RUN mkdir -p /var/www/html \
-	&& wget -q https:///wordpress.org/latest.tar.gz -O /tmp/wordpress.tar.gz \
-	&& tar -xzf /tmp/wordpress.tar.gz -C /var/www/html --strip-components=1
+RUN wget -q -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x /usr/local/bin/wp
 
-COPY conf/wp-config.php /var/www/html/wp-config.php
+COPY conf/wp_config.php /var/www/html/wp-config.php
+COPY tools/setup_wordpress.sh /setup_wordpress.sh
+COPY tools/entrypoint.sh /entrypoint.sh
 
-CMD ["php-fpm", "-F"]
+RUN chmod +x /setup_wordpress.sh /entrypoint.sh
 
-ENTRYPOINT [ "./tools/entrypoint.sh" ]
+ENTRYPOINT ["/entrypoint.sh"]

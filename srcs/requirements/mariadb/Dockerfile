@@ -1,9 +1,9 @@
 FROM alpine:latest
 
-RUN apk update && apk add --no-cache mariadb mariadb-server
+RUN apk update && apk add --no-cache mariadb mariadb-server bash vim
 
-COPY conf/setup.sql /docker-entrypoint-initdb.d/setup.sql
+COPY tools/setup_db.sh /setup_db.sh
+COPY tools/entrypoint.sh /entrypoint.sh
+RUN chmod +x /setup_db.sh /entrypoint.sh
 
-CMD ["mysqld"]
-
-ENTRYPOINT [ "./tools/entrypoint.sh" ]
+ENTRYPOINT ["/entrypoint.sh"]
