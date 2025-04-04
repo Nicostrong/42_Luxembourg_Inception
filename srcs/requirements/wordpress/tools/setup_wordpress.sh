@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
 WP_PATH="/var/www/html"
 
 REQUIRED_VARS=("WORDPRESS_DB_HOST" "WORDPRESS_DB_USER" "WORDPRESS_DB_PASSWORD" "WORDPRESS_DB_NAME" "WP_URL" "WP_TITLE" "WP_ADMIN" "WP_ADMIN_PASSWORD" "WP_ADMIN_EMAIL")
 
 for var in "${REQUIRED_VARS[@]}"; do
-	if [ -z "$(eval echo \$$var ]; then
+	if [ -z "$(eval echo \$$var)" ]; then
 		echo "🚨	Error: Environment variable $var is not set."
 		exit 1
 	fi

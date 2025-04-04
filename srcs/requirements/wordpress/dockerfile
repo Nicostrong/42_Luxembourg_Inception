@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 RUN apk update && apk add --no-cache \
-	php8 php8-fpm php8-mysqli php8-json php8-mbstring php8-xml \
+	php84 php84-fpm php84-mysqli php84-json php84-mbstring php84-xml \
 	curl mysql-client bash sudo wget vim
 
 RUN wget -q -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \

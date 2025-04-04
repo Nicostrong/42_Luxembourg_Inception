@@ -12,5 +12,5 @@ fi
 echo "Setting up Wordpress ..."
 sh /setup_wordpress.sh
 
-echo "Starting php-fpm8 ..."
-exec php-fpm8 -F
+echo "Starting php-fpm84 ..."
+exec php-fpm84 -F
