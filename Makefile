@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/31 07:43:50 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/03/31 17:26:54 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/04/07 08:52:25 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,32 +25,32 @@ init:
 
 #	run the docker-compose in back-ground
 up:			init
-	docker-compose -f $(DOCKER_COMPOSE_FILE) up -d
+	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) up -d
 
 #	Stop all containers
 down:
-	docker-compose -f $(DOCKER_COMPOSE_FILE) down
+	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) down
 
 #	build or rebuild the containers
 build:
-	docker-compose -f $(DOCKER_COMPOSE_FILE) build
+	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) build
 
 #	Show all logs of the containers
 logs:
-	docker-compose -f $(DOCKER_COMPOSE_FILE) logs -f
+	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) logs -f
 
 #	show the statement of all containers
 ps:
-	docker-compose -f $(DOCKER_COMPOSE_FILE) ps
+	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) ps
 
 #	restart all containers
 restart:	down up
 
 #	Clean all volumes and networks
 clean:
-	docker-compose -f $(DOCKER_COMPOSE_FILE) down -v
+	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) down -v
 
 #	Delete all volumes and networks
 prune:
-	docker system prune -a --volumes -f
+	sudo docker system prune -a --volumes -f
 	@echo "✅	All unused volumes and networks have been deleted."
