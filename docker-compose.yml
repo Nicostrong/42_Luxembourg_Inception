@@ -10,6 +10,7 @@ services:
       - wordpress
     networks:
       - inception_network
+    command: ["sleep", "infinity"]
     restart: always
 
   wordpress:
