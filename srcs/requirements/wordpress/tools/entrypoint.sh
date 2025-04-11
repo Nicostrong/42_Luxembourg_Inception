@@ -1,6 +1,6 @@
 #!/bin/sh
 
-WORDPRESS_DB_PASSWORD=$(cat /run/secrets/db_password)
+WORDPRESS_DB_PASSWORD=$(cat /run/secrets/db_password.txt)
 
 if [ -f /run/secrets/wp_settings ]; then
     export $(grep -v '^#' /run/secrets/wp_settings | xargs)
