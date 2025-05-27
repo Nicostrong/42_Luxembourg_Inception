@@ -3,9 +3,9 @@
 WORDPRESS_DB_PASSWORD=$(cat /run/secrets/db_password.txt)
 
 if [ -f /run/secrets/wp_settings ]; then
-    export $(grep -v '^#' /run/secrets/wp_settings | xargs)
+    export $(grep -v '^#' /run/secrets/wp_settings.txt | xargs)
 else
-    echo "🚨 ERROR : Secrets file  /run/secrets/wp_settings notfund !" >&2
+    echo "🚨 ERROR : Secrets file  /run/secrets/wp_settings notfund.txt !" >&2
     exit 1
 fi
 
