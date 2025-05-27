@@ -25,32 +25,32 @@ init:
 
 #	run the docker-compose in back-ground
 up:			init
-	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) up -d
+	docker-compose -f $(DOCKER_COMPOSE_FILE) up -d
 
 #	Stop all containers
 down:
-	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) down
+	docker-compose -f $(DOCKER_COMPOSE_FILE) down
 
 #	build or rebuild the containers
 build:
-	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) build
+	docker-compose -f $(DOCKER_COMPOSE_FILE) build
 
 #	Show all logs of the containers
 logs:
-	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) logs -f
+	docker-compose -f $(DOCKER_COMPOSE_FILE) logs -f
 
 #	show the statement of all containers
 ps:
-	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) ps
+	docker-compose -f $(DOCKER_COMPOSE_FILE) ps
 
 #	restart all containers
 restart:	down up
 
 #	Clean all volumes and networks
 clean:
-	sudo docker-compose -f $(DOCKER_COMPOSE_FILE) down -v
+	docker-compose -f $(DOCKER_COMPOSE_FILE) down -v
 
 #	Delete all volumes and networks
 prune:
-	sudo docker system prune -a --volumes -f
+	docker system prune -a --volumes -f
 	@echo "✅	All unused volumes and networks have been deleted."
