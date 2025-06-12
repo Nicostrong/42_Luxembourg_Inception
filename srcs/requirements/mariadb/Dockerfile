@@ -6,4 +6,4 @@ COPY tools/setup_mariadb.sh /setup_mariadb.sh
 COPY tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /setup_mariadb.sh /entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]

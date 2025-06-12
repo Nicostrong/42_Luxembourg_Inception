@@ -2,6 +2,10 @@ FROM alpine:latest
 
 RUN apk update && apk add --no-cache nginx openssl bash vim
 
+RUN mkdir -p /var/log/nginx \
+    && touch /var/log/nginx/access.log \
+    && touch /var/log/nginx/error.log
+    
 RUN mkdir -p /etc/nginx/ssl && chown -R root:root /etc/nginx/ssl
 
 COPY conf/nginx.conf /etc/nginx/nginx.conf
@@ -10,4 +14,4 @@ COPY tools/entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh /generate_ssl.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]

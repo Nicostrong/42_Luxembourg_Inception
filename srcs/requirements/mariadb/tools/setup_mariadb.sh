@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Vérifier si la base de données existe déjà
 if [ ! -d "/var/lib/mysql/$DB_NAME" ]; then

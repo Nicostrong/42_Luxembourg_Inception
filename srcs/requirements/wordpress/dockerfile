@@ -8,9 +8,9 @@ RUN wget -q -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds
     && chmod +x /usr/local/bin/wp
 
 COPY conf/wp_config.php /var/www/html/wp-config.php
-COPY tools/setup_wordpress.sh /setup_wordpress.sh
-COPY tools/entrypoint.sh /entrypoint.sh
+COPY tools/setup_wordpress.sh ./setup_wordpress.sh
+COPY tools/entrypoint.sh ./entrypoint.sh
 
-RUN chmod +x /setup_wordpress.sh /entrypoint.sh
+RUN chmod +x ./setup_wordpress.sh ./entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]

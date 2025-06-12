@@ -1,56 +1,61 @@
+version: "3.8"
+
 services:
   nginx:
-    build: ./srcs/requirements/nginx
-    container_name: nginx
+    image: 42_luxembourg_inception_nginx:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
     ports:
       - 443:443
     volumes:
       - wordpress_data:/var/www/html
-    depends_on:
-      - wordpress
     networks:
       - inception_network
-    restart: always
 
   wordpress:
-    build: ./srcs/requirements/wordpress
-    container_name: wordpress
-    environment:
-      WORDPRESS_DB_HOST: mariadb
-      WORDPRESS_DB_USER: "${DB_USER}"
-      WORDPRESS_DB_NAME: "${DB_NAME}"
+    image: 42_luxembourg_inception_wordpress:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
     volumes:
       - wordpress_data:/var/www/html
     secrets:
+      - db_host
+      - db_user
+      - db_name
       - db_password
-      - wp_settings
-    depends_on:
-      - mariadb
+      - wp_admin
+      - wp_host
+      - wp_mail
+      - wp_password
+      - wp_port
     expose:
       - 9000
     networks:
       - inception_network
-    restart: always
 
   mariadb:
-    build: ./srcs/requirements/mariadb
-    container_name: mariadb
-    environment:
-      MYSQL_DATABASE: "${DB_NAME}"
-      MYSQL_USER: "${DB_USER}"
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD_FILE}"
+    image: 42_luxembourg_inception_mariadb:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
     volumes:
       - mariadb_data:/var/lib/mysql
     secrets:
+      - db_name
+      - db_user
       - db_root_password
       - db_password
     networks:
       - inception_network
-    restart: always
 
 networks:
   inception_network:
-    driver: bridge
+    driver: overlay
 
 volumes:
   mariadb_data:
@@ -59,10 +64,24 @@ volumes:
     driver: local
 
 secrets:
+  db_host:
+    file: secrets/db_host.txt
+  db_name:
+    file: secrets/db_name.txt
   db_password:
     file: secrets/db_password.txt
   db_root_password:
     file: secrets/db_root_password.txt
-  wp_settings:
-    file: secrets/wp_settings.txt
+  db_user:
+    file: secrets/db_user.txt
+  wp_admin:
+    file: secrets/wp_admin.txt
+  wp_host:
+    file: secrets/wp_host.txt
+  wp_mail:
+    file: secrets/wp_mail.txt
+  wp_password:
+    file: secrets/wp_password.txt
+  wp_port:
+    file: secrets/wp_port.txt
 
