@@ -35,21 +35,20 @@ services:
     volumes:
       - wordpress_data:/var/www/html
     secrets:
+      - wp_host
+      - wp_admin
+      - wp_pwd
+      - wp_mail
+      - db_name
       - db_host
       - db_user
-      - db_name
-      - db_password
-      - wp_admin
-      - wp_host
-      - wp_mail
-      - wp_password
-      - wp_port
+      - db_pwd
     expose:
       - 9000
     networks:
       - inception_network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000"]
+      test: ["CMD", "curl", "-f", "http://localhost/index.php"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -69,8 +68,10 @@ services:
     secrets:
       - db_name
       - db_user
-      - db_root_password
-      - db_password
+      - db_pwd
+      - db_root_pwd
+    expose:
+      - 3306
     networks:
       - inception_network
     healthcheck:
@@ -91,24 +92,19 @@ volumes:
     driver: local
 
 secrets:
-  db_host:
-    file: secrets/db_host.txt
   db_name:
     file: secrets/db_name.txt
-  db_password:
-    file: secrets/db_password.txt
-  db_root_password:
-    file: secrets/db_root_password.txt
   db_user:
     file: secrets/db_user.txt
+  db_pwd:
+    file: secrets/db_pwd.txt
+  db_root_pwd:
+    file: secrets/db_root_pwd.txt
   wp_admin:
     file: secrets/wp_admin.txt
   wp_host:
     file: secrets/wp_host.txt
   wp_mail:
     file: secrets/wp_mail.txt
-  wp_password:
-    file: secrets/wp_password.txt
-  wp_port:
-    file: secrets/wp_port.txt
-
+  wp_pwd:
+    file: secrets/wp_pwd.txt

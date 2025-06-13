@@ -2,46 +2,32 @@
 
 set -e
 
-export DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
-export DB_PASSWORD=$(cat /run/secrets/db_password)
+export DB_NAME=$(cat /run/secrets/db_name)
 export DB_USER=$(cat /run/secrets/db_user)
-export DB_DATABASE=$(cat /run/secrets/db_name)
+export DB_PWD=$(cat /run/secrets/db_pwd)
+export DB_ROOT_PWD=$(cat /run/secrets/db_root_pwd)
 
 # DEBUG
-if [ -z "$DB_ROOT_PASSWORD" ]; then
-    echo "🚨 ERROR: DB_ROOT_PASSWORD not defined !"
-    exit 1
-fi
-if [ -z "$DB_PASSWORD" ]; then
-    echo "🚨 ERROR: DB_PASSWORD not defined !"
-    exit 1
-fi
-if [ -z "$DB_USER" ]; then
-    echo "🚨 ERROR: DB_USER not defined !"
-    exit 1
-fi
-if [ -z "$DB_DATABASE" ]; then
-    echo "🚨 ERROR: DB_DATABASE not defined !"
-    exit 1
-fi
+[ -z "$DB_NAME" ]      && echo "🚨 ERROR: DB_NAME not defined!" && exit 1
+[ -z "$DB_USER" ]      && echo "🚨 ERROR: DB_USER not defined!" && exit 1
+[ -z "$DB_PWD" ]       && echo "🚨 ERROR: DB_PWD not defined!" && exit 1
+[ -z "$DB_ROOT_PWD" ]  && echo "🚨 ERROR: DB_ROOT_PWD not defined!" && exit 1
 
 # Init base si vide
-if [ ! -f /var/lib/mysql/mysql/db.MYD ]; then
+if [ -z "$(ls -A /var/lib/mysql)" ]; then
   echo "⚠️ First time setup - initializing DB"
   mariadb-install-db --user=mysql --datadir=/var/lib/mysql
   su-exec mysql mariadbd --skip-networking --socket=/run/mysqld/mysqld.sock & pid=$!
 
   echo "⌛ Waiting for MariaDB to be ready..."
-  until mariadb-admin ping --socket=/run/mysqld/mysqld.sock --silent; do
-    sleep 1
-  done
+  until mariadb-admin ping --socket=/run/mysqld/mysqld.sock --silent; do sleep 1; done
 
   /scripts/setup_mariadb.sh
 
-  su-exec mysql mariadb-admin --socket=/run/mysqld/mysqld.sock -u root -p"$DB_ROOT_PASSWORD" shutdown
+  su-exec mysql mariadb-admin --socket=/run/mysqld/mysqld.sock -u root -p"$DB_ROOT_PWD" shutdown
   echo "✅ MariaDB setup complete."
 fi
 
-# Démarrage final en tant que mysql
+# Final launch
 echo "🚀 Launching MariaDB normally as mysql"
 exec su-exec mysql mariadbd

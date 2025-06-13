@@ -3,31 +3,28 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/31 07:43:50 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/04/07 08:52:25 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/13 15:57:10 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
 DOCKER_COMPOSE_FILE = docker-compose.yml
 STACK_NAME = 42_Luxembourg
 
-.PHONY: up down logs ps ls build restart clean prune init check_secrets
+.PHONY: up down logs ps ls build restart clean prune init check_secrets re
 
 init:
-	@which docker > /dev/null 2>&1 || (echo "❌\tDocker isn't installed!!" && exit 1)
-	@which docker-compose > /dev/null 2>&1 || (echo "❌\tDocker Compose isn't installed!!" && exit 1)
-	@echo "✅\tDocker and Docker Compose are installed."
 	@docker swarm init || echo "⚠️ Swarm was already initialized."
-	@docker build -t 42_luxembourg_inception_mariadb ./srcs/requirements/mariadb
-	@docker build -t 42_luxembourg_inception_wordpress ./srcs/requirements/wordpress
-	@docker build -t 42_luxembourg_inception_nginx ./srcs/requirements/nginx
+	@docker build -t $(STACK_NAME)_inception_mariadb	./srcs/requirements/mariadb
+	@docker build -t $(STACK_NAME)_inception_wordpress	./srcs/requirements/wordpress
+	@docker build -t $(STACK_NAME)_inception_nginx		./srcs/requirements/nginx
 	@echo "✅ Docker images are built."
 	@docker info | grep "Swarm: active" || (echo "❌ Swarm is still inactive!" && exit 1)
 	@echo "✅ Docker Swarm is enabled."
 
-up: init
+up:			init
 	@docker stack deploy -c $(DOCKER_COMPOSE_FILE) $(STACK_NAME)
 
 down:
@@ -55,7 +52,7 @@ restart:
 	@sleep 2
 	@docker stack deploy -c $(DOCKER_COMPOSE_FILE) $(STACK_NAME)
 
-clean: prune
+clean:		prune
 	@docker network rm $(STACK_NAME)_inception_network || true
 	@docker system prune -a --volumes -f
 	@echo "✅\tAll unused volumes, networks and images have been deleted."
@@ -74,3 +71,8 @@ reset-db:
 
 check_secrets:
 	@docker secret ls
+
+re:			down \
+			clean \
+			prune \
+			up

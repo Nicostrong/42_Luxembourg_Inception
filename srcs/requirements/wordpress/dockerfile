@@ -1,18 +1,22 @@
 FROM alpine:latest
 
 RUN apk update && apk add --no-cache \
-	php84 php84-fpm php84-mysqli php84-json php84-mbstring php84-xml \
-	curl bash wget netcat-openbsd mariadb-client
+    php84 php84-fpm php84-mysqli php84-json php84-mbstring php84-xml \
+    curl bash wget netcat-openbsd mariadb-client
 
-RUN wget -q -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-    && chmod +x /usr/local/bin/wp
+# Installer WP-CLI
+RUN wget -q -O		/usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x		/usr/local/bin/wp
 
-RUN mkdir -p /var/www/html /scripts
+# Préparation des dossiers
+RUN mkdir -p	/var/www/html	/scripts
 
-COPY conf/wp_config.php /var/www/html/wp-config.php
-COPY tools/setup_wordpress.sh /scripts/setup_wordpress.sh
-COPY tools/entrypoint.sh /scripts/entrypoint.sh
+# Copier la configuration et les scripts
+COPY conf/wp_config.php			/var/www/html/wp-config.php
+COPY tools/setup_wordpress.sh	/scripts/setup_wordpress.sh
+COPY tools/entrypoint.sh		/scripts/entrypoint.sh
 
-RUN chmod +x /scripts/*.sh
+# Donner les droits
+RUN chmod +x	/scripts/*.sh
 
-ENTRYPOINT ["/scripts/entrypoint.sh"]	
+ENTRYPOINT ["/scripts/entrypoint.sh"]
