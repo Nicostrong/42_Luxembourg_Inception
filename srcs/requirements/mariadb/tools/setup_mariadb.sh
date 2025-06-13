@@ -1,18 +1,30 @@
 #!/bin/bash
+set -e
 
-# Vérifier si la base de données existe déjà
-if [ ! -d "/var/lib/mysql/$DB_NAME" ]; then
-	echo "⚙️	Creating Database and User..."
+# DEBUG
+echo "DB_ROOT_PASSWORD : $DB_ROOT_PASSWORD"
+echo "DB_PASSWORD : $DB_PASSWORD"
+echo "DB_USER : $DB_USER"
+echo "DB_DATABASE : $DB_DATABASE"
+# DEBUG
+SOCKET="/run/mysqld/mysqld.sock"
 
-	mysql -u root <<EOF
-ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-CREATE DATABASE IF NOT EXISTS ${DB_NAME};
-CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
+if [ ! -d "/var/lib/mysql/$DB_DATABASE" ]; then
+  echo "⚙️  Creating Database: $DB_DATABASE and User: $DB_USER..."
+
+mariadb --user=root --password="$DB_ROOT_PASSWORD" --socket="$SOCKET" <<EOF
+-- Configure root with password auth
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
+CREATE DATABASE IF NOT EXISTS \`${DB_DATABASE}\`;
+CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON \`${DB_DATABASE}\`.* TO '${DB_USER}'@'%';
 FLUSH PRIVILEGES;
+
+-- Afficher les bases de données existantes
+SHOW DATABASES;
 EOF
 
-	echo "🚀	MariaDB setup complete!"
+  echo "🚀  MariaDB setup complete!"
 else
-	echo "🚨	Database already exists, skipping setup."
+  echo "🚨  Database already exists, skipping setup."
 fi

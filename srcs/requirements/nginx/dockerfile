@@ -1,17 +1,18 @@
 FROM alpine:latest
 
-RUN apk update && apk add --no-cache nginx openssl bash vim
+RUN apk update && apk add --no-cache nginx openssl bash curl
 
 RUN mkdir -p /var/log/nginx \
-    && touch /var/log/nginx/access.log \
-    && touch /var/log/nginx/error.log
-    
-RUN mkdir -p /etc/nginx/ssl && chown -R root:root /etc/nginx/ssl
+ && mkdir -p /etc/nginx/ssl \
+ && mkdir -p /scripts \
+ && touch /var/log/nginx/access.log /var/log/nginx/error.log \
+ && chown -R root:root /etc/nginx/ssl /var/log/nginx
 
 COPY conf/nginx.conf /etc/nginx/nginx.conf
-COPY tools/generate_ssl.sh /generate_ssl.sh
-COPY tools/entrypoint.sh /entrypoint.sh
 
-RUN chmod +x /entrypoint.sh /generate_ssl.sh
+COPY tools/generate_ssl.sh /scripts/generate_ssl.sh
+COPY tools/entrypoint.sh /scripts/entrypoint.sh
 
-ENTRYPOINT ["./entrypoint.sh"]
+RUN chmod +x /scripts/*.sh
+
+ENTRYPOINT ["/scripts/entrypoint.sh"]

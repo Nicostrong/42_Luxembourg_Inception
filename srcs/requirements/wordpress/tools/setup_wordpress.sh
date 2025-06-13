@@ -2,7 +2,7 @@
 
 WP_PATH="/var/www/html"
 
-REQUIRED_VARS=("WORDPRESS_DB_HOST" "WORDPRESS_DB_USER" "WORDPRESS_DB_PASSWORD" "WORDPRESS_DB_NAME" "WP_URL" "WP_TITLE" "WP_ADMIN" "WP_ADMIN_PASSWORD" "WP_ADMIN_EMAIL")
+REQUIRED_VARS=("WP_DB_HOST" "WP_DB_USER" "WP_DB_PASSWORD" "WP_DB_NAME" "WP_URL" "WP_TITLE" "WP_ADMIN" "WP_ADMIN_PASSWORD" "WP_ADMIN_EMAIL")
 
 for var in "${REQUIRED_VARS[*]}"; do
 	if [ -z "$(eval echo \$$var)" ]; then
@@ -17,10 +17,10 @@ if [ ! -f "$WP_PATH/wp-config.php" ]; then
 
     echo "⚙️	Configuration of WordPress..."
     wp config create \
-        --dbname="$WORDPRESS_DB_NAME" \
-        --dbuser="$WORDPRESS_DB_USER" \
-        --dbpass="$WORDPRESS_DB_PASSWORD" \
-        --dbhost="$WORDPRESS_DB_HOST" \
+        --dbname="$WP_DB_NAME" \
+        --dbuser="$WP_DB_USER" \
+        --dbpass="$WP_DB_PASSWORD" \
+        --dbhost="$WP_DB_HOST" \
         --allow-root --path=$WP_PATH
 
     echo "🚀	Installation of WordPress..."
@@ -36,3 +36,4 @@ if [ ! -f "$WP_PATH/wp-config.php" ]; then
     chown -R www-data:www-data $WP_PATH
     chmod -R 755 $WP_PATH
 fi
+echo "✅ Wordpress is running."

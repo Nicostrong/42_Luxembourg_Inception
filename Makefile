@@ -16,9 +16,9 @@ STACK_NAME = 42_Luxembourg
 .PHONY: up down logs ps ls build restart clean prune init check_secrets
 
 init:
-	@which docker > /dev/null 2>&1 || (echo "❌	Docker isn't installed!!" && exit 1)
-	@which docker-compose > /dev/null 2>&1 || (echo "❌	Docker Compose isn't installed!!" && exit 1)
-	@echo "✅	Docker and Docker Compose are installed."
+	@which docker > /dev/null 2>&1 || (echo "❌\tDocker isn't installed!!" && exit 1)
+	@which docker-compose > /dev/null 2>&1 || (echo "❌\tDocker Compose isn't installed!!" && exit 1)
+	@echo "✅\tDocker and Docker Compose are installed."
 	@docker swarm init || echo "⚠️ Swarm was already initialized."
 	@docker build -t 42_luxembourg_inception_mariadb ./srcs/requirements/mariadb
 	@docker build -t 42_luxembourg_inception_wordpress ./srcs/requirements/wordpress
@@ -27,7 +27,7 @@ init:
 	@docker info | grep "Swarm: active" || (echo "❌ Swarm is still inactive!" && exit 1)
 	@echo "✅ Docker Swarm is enabled."
 
-up:		init
+up: init
 	@docker stack deploy -c $(DOCKER_COMPOSE_FILE) $(STACK_NAME)
 
 down:
@@ -55,11 +55,22 @@ restart:
 	@sleep 2
 	@docker stack deploy -c $(DOCKER_COMPOSE_FILE) $(STACK_NAME)
 
-clean:		down prune
+clean: prune
+	@docker network rm $(STACK_NAME)_inception_network || true
+	@docker system prune -a --volumes -f
+	@echo "✅\tAll unused volumes, networks and images have been deleted."
 
 prune:
 	@docker system prune -a --volumes -f
-	@echo "✅	All unused volumes and networks have been deleted."
+	@echo "✅\tAll unused volumes and networks have been deleted."
+	@docker volume rm $(STACK_NAME)_mariadb_data || true
+	@echo "✅\tMariaDB volume deleted."
+	@docker volume rm $(STACK_NAME)_wordpress_data || true
+	@echo "✅\tWordpress volume deleted."
+
+reset-db:
+	@docker volume rm $(STACK_NAME)_mariadb_data || true
+	@echo "✅\tMariaDB volume deleted."
 
 check_secrets:
 	@docker secret ls

@@ -9,3 +9,5 @@ echo "✅ WordPress is done, starting of Nginx !"
 sh /generate_ssl.sh
 
 exec nginx -g "daemon off;"
+
+echo "✅ Nginx is running."

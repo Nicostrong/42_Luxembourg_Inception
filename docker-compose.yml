@@ -7,12 +7,21 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
     ports:
       - 443:443
     volumes:
       - wordpress_data:/var/www/html
     networks:
       - inception_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://localhost/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   wordpress:
     image: 42_luxembourg_inception_wordpress:latest
@@ -20,6 +29,9 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
     volumes:
       - wordpress_data:/var/www/html
     secrets:
@@ -36,13 +48,22 @@ services:
       - 9000
     networks:
       - inception_network
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+      
   mariadb:
     image: 42_luxembourg_inception_mariadb:latest
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 30s
     volumes:
       - mariadb_data:/var/lib/mysql
     secrets:
@@ -52,6 +73,12 @@ services:
       - db_password
     networks:
       - inception_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 networks:
   inception_network:

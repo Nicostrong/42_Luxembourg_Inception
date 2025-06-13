@@ -2,15 +2,17 @@ FROM alpine:latest
 
 RUN apk update && apk add --no-cache \
 	php84 php84-fpm php84-mysqli php84-json php84-mbstring php84-xml \
-	curl mysql-client bash sudo wget vim
+	curl bash wget netcat-openbsd mariadb-client
 
 RUN wget -q -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x /usr/local/bin/wp
 
+RUN mkdir -p /var/www/html /scripts
+
 COPY conf/wp_config.php /var/www/html/wp-config.php
-COPY tools/setup_wordpress.sh ./setup_wordpress.sh
-COPY tools/entrypoint.sh ./entrypoint.sh
+COPY tools/setup_wordpress.sh /scripts/setup_wordpress.sh
+COPY tools/entrypoint.sh /scripts/entrypoint.sh
 
-RUN chmod +x ./setup_wordpress.sh ./entrypoint.sh
+RUN chmod +x /scripts/*.sh
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/scripts/entrypoint.sh"]	
