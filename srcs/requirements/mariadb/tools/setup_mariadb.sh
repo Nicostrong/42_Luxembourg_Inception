@@ -13,7 +13,7 @@ SOCKET="/run/mysqld/mysqld.sock"
 if [ ! -d "/var/lib/mysql/$DB_NAME" ]; then
   echo "⚙️  Creating Database: $DB_NAME and User: $DB_USER..."
 
-  mariadb --user=root --password="$DB_ROOT_PWD" --socket="$SOCKET" <<EOF
+  mariadb -u root -p"$DB_ROOT_PWD" --socket="$SOCKET" <<EOF
 -- Ensure root user
 CREATE USER IF NOT EXISTS 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PWD}';
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PWD}';

@@ -1,13 +1,20 @@
 #!/bin/sh
+set -e
 
-echo "⏳ Waitting on WordPress..."
-until curl -s http://wordpress:9000 > /dev/null; do
-  sleep 2
+host="wordpress"
+port=9000
+
+echo "⏳ Waiting for WordPress ($host:$port)..."
+until nc -z "$host" "$port"; do
+  echo "⌛ Waiting for $host:$port..."
+  sleep 30
 done
-echo "✅ WordPress is done, starting of Nginx !"
 
-sh /generate_ssl.sh
+echo "⚙️ Generating SSL..."
+sh /scripts/generate_ssl.sh
 
+echo "✅ SSL ready. Testing nginx config..."
+nginx -t
+
+echo "🚀 Launching nginx..."
 exec nginx -g "daemon off;"
-
-echo "✅ Nginx is running."

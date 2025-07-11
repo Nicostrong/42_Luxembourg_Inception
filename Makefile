@@ -10,69 +10,32 @@
 #                                                                              #
 # **************************************************************************** #
 
-DOCKER_COMPOSE_FILE = docker-compose.yml
-STACK_NAME = 42_Luxembourg
+COMPOSE_FILE = docker-compose.yml
 
-.PHONY: up down logs ps ls build restart clean prune init check_secrets re
+.PHONY: up down logs build clean re fclean
 
-init:
-	@docker swarm init || echo "⚠️ Swarm was already initialized."
-	@docker build -t $(STACK_NAME)_inception_mariadb	./srcs/requirements/mariadb
-	@docker build -t $(STACK_NAME)_inception_wordpress	./srcs/requirements/wordpress
-	@docker build -t $(STACK_NAME)_inception_nginx		./srcs/requirements/nginx
-	@echo "✅ Docker images are built."
-	@docker info | grep "Swarm: active" || (echo "❌ Swarm is still inactive!" && exit 1)
-	@echo "✅ Docker Swarm is enabled."
-
-up:			init
-	@docker stack deploy -c $(DOCKER_COMPOSE_FILE) $(STACK_NAME)
+up:
+	@echo "📦 Création et déploiement des containers..."
+	@docker-compose -f $(COMPOSE_FILE) up -d --build
+	@$(MAKE) logs
 
 down:
-	@docker stack rm $(STACK_NAME)
-	@docker swarm leave --force
+	@echo "🧹 Arrêt des containers..."
+	@docker-compose -f $(COMPOSE_FILE) down
 
 build:
-	@docker build -t $(STACK_NAME)_inception_mariadb ./srcs/requirements/mariadb
-	@docker build -t $(STACK_NAME)_inception_wordpress ./srcs/requirements/wordpress
-	@docker build -t $(STACK_NAME)_inception_nginx ./srcs/requirements/nginx
+	@echo "🔧 Construction des images..."
+	@docker-compose -f $(COMPOSE_FILE) build
 
 logs:
-	@docker service logs $(STACK_NAME)_mariadb
-	@docker service logs $(STACK_NAME)_wordpress
-	@docker service logs $(STACK_NAME)_nginx
+	@echo "📜 Affichage des logs (Ctrl+C pour quitter)..."
+	@docker-compose logs -f
 
-ps:
-	@docker stack ps $(STACK_NAME)
-
-ls:
-	@docker service ls
-
-restart:
-	@docker stack rm $(STACK_NAME)
-	@sleep 2
-	@docker stack deploy -c $(DOCKER_COMPOSE_FILE) $(STACK_NAME)
-
-clean:		prune
-	@docker network rm $(STACK_NAME)_inception_network || true
+clean:
+	@echo "🧽 Nettoyage des volumes et ressources inutilisées..."
+	@docker volume rm $(shell docker volume ls -qf name=inception) || true
 	@docker system prune -a --volumes -f
-	@echo "✅\tAll unused volumes, networks and images have been deleted."
 
-prune:
-	@docker system prune -a --volumes -f
-	@echo "✅\tAll unused volumes and networks have been deleted."
-	@docker volume rm $(STACK_NAME)_mariadb_data || true
-	@echo "✅\tMariaDB volume deleted."
-	@docker volume rm $(STACK_NAME)_wordpress_data || true
-	@echo "✅\tWordpress volume deleted."
+re: fclean up
 
-reset-db:
-	@docker volume rm $(STACK_NAME)_mariadb_data || true
-	@echo "✅\tMariaDB volume deleted."
-
-check_secrets:
-	@docker secret ls
-
-re:			down \
-			clean \
-			prune \
-			up
+fclean: down clean

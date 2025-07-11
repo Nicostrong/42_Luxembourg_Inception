@@ -1,8 +1,8 @@
 FROM alpine:latest
 
-RUN apk update && apk add --no-cache mariadb mariadb-client bash su-exec && \
-    addgroup -S mysql && adduser -S mysql -G mysql && \
-    mkdir -p    /var/lib/mysql  /run/mysqld         /scripts && \
+RUN apk update && apk add --no-cache mariadb mariadb-client bash su-exec
+RUN getent group mysql || addgroup -S mysql
+RUN mkdir -p    /var/lib/mysql  /run/mysqld         /scripts && \
     chown -R    mysql:mysql     /var/lib/mysql      /run/mysqld
 
 COPY tools/setup_mariadb.sh /scripts/setup_mariadb.sh

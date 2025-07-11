@@ -1,22 +1,22 @@
 FROM alpine:latest
 
+RUN adduser -S -H -D -u 82 -G www-data www-data || true
 RUN apk update && apk add --no-cache \
-    php84 php84-fpm php84-mysqli php84-json php84-mbstring php84-xml \
-    curl bash wget netcat-openbsd mariadb-client
+    php84 php84-fpm php84-cli php84-phar php84-mysqli php84-json php84-mbstring php84-xml fcgi \
+    curl bash wget netcat-openbsd mariadb-client vim
 
-# Installer WP-CLI
+RUN ln -sf /usr/bin/php84 /usr/bin/php
+
+RUN echo "memory_limit = 256M" >> /etc/php84/php.ini
+
 RUN wget -q -O		/usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x		/usr/local/bin/wp
 
-# Préparation des dossiers
 RUN mkdir -p	/var/www/html	/scripts
 
-# Copier la configuration et les scripts
-COPY conf/wp_config.php			/var/www/html/wp-config.php
 COPY tools/setup_wordpress.sh	/scripts/setup_wordpress.sh
 COPY tools/entrypoint.sh		/scripts/entrypoint.sh
 
-# Donner les droits
 RUN chmod +x	/scripts/*.sh
 
 ENTRYPOINT ["/scripts/entrypoint.sh"]
