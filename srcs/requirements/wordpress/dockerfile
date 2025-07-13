@@ -1,16 +1,35 @@
-FROM alpine:latest
+#   os of the container not the latest
+FROM alpine:3.21
+
+#   update and upgrade of apk
+RUN apk update && apk upgrade
+
+#   installing some programs
+RUN  apk add --no-cache php84
+RUN  apk add --no-cache php84-fpm
+RUN  apk add --no-cache php84-cli
+RUN  apk add --no-cache php84-phar
+RUN  apk add --no-cache php84-mysqli
+RUN  apk add --no-cache php84-json
+RUN  apk add --no-cache php84-mbstring
+RUN  apk add --no-cache php84-xml
+RUN  apk add --no-cache fcgi
+RUN  apk add --no-cache curl
+RUN  apk add --no-cache bash
+RUN  apk add --no-cache wget
+RUN  apk add --no-cache netcat-openbsd
+RUN  apk add --no-cache mariadb-client
+RUN  apk add --no-cache vim
 
 RUN adduser -S -H -D -u 82 -G www-data www-data || true
-RUN apk update && apk add --no-cache \
-    php84 php84-fpm php84-cli php84-phar php84-mysqli php84-json php84-mbstring php84-xml fcgi \
-    curl bash wget netcat-openbsd mariadb-client vim
 
 RUN ln -sf /usr/bin/php84 /usr/bin/php
 
 RUN echo "memory_limit = 256M" >> /etc/php84/php.ini
 
 RUN wget -q -O		/usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-    && chmod +x		/usr/local/bin/wp
+
+RUN chmod +x		/usr/local/bin/wp
 
 RUN mkdir -p	/var/www/html	/scripts
 

@@ -1,39 +1,43 @@
-version: "3.8"
-
 services:
   mariadb:
-    build: ./srcs/requirements/mariadb
+    build: ./requirements/mariadb
+    container_name: mariadb
     volumes:
       - mariadb_data:/var/lib/mysql
-      - ./secrets:/run/secrets:ro
+      - ../secrets:/run/secrets:ro
     expose:
       - 3306
     networks:
       - inception_network
+    restart: always
 
   wordpress:
-    build: ./srcs/requirements/wordpress
+    build: ./requirements/wordpress
+    container_name: wordpress
     volumes:
       - wordpress_data:/var/www/html
-      - ./secrets:/run/secrets:ro
+      - ../secrets:/run/secrets:ro
     expose:
       - 9000
     depends_on:
       - mariadb
     networks:
       - inception_network
+    restart: always
 
   nginx:
-    build: ./srcs/requirements/nginx
+    build: ./requirements/nginx
+    container_name: nginx
     ports:
       - "443:443"
     volumes:
       - wordpress_data:/var/www/html
-      - ./secrets:/run/secrets:ro
+      - ../secrets:/run/secrets:ro
     depends_on:
       - wordpress
     networks:
       - inception_network
+    restart: always
 networks:
   inception_network:
     driver: bridge
