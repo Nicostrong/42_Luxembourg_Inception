@@ -1,17 +1,24 @@
 #!/bin/sh
+
 set -e
 
 host="wordpress"
-port=9000
 
-echo "⏳ Waiting for WordPress ($host:$port)..."
-until nc -z "$host" "$port"; do
-  echo "⌛ Waiting for $host:$port..."
-  sleep 30
+echo "⏳ Waiting for WordPress ("$host":"$WP_PORT")..."
+timeout=0
+while ! nc -z "$host" "$WP_PORT"; do
+  echo "⌛ Waiting for "$host":"$WP_PORT"..."
+  sleep 2
+  timeout=$((timeout+2))
+  [ $timeout -gt 60 ] && echo "❌ Timeout waiting for WordPress" && exit 1
 done
 
-echo "⚙️ Generating SSL..."
-sh /scripts/generate_ssl.sh
+if [ -f /scripts/generate_ssl.sh ]; then
+  echo "⚙️ Generating SSL..."
+  sh /scripts/generate_ssl.sh
+else
+  echo "⚠️ No SSL script found. Skipping SSL generation." && exit 1
+fi
 
 echo "✅ SSL ready. Testing nginx config..."
 nginx -t

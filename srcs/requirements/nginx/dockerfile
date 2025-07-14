@@ -14,6 +14,7 @@ RUN apk add --no-cache vim
 #   creating some directory
 RUN mkdir -p /var/log/nginx
 RUN mkdir -p /var/run/nginx
+RUN mkdir -p /var/www/html
 RUN mkdir -p /etc/nginx/ssl
 RUN mkdir -p /scripts
 
@@ -21,31 +22,33 @@ RUN mkdir -p /scripts
 RUN touch /var/log/nginx/access.log
 RUN touch /var/log/nginx/error.log
 
+#   creating new user and new group if not exist
+RUN getent group www-data || addgroup -S www-data
+RUN getent passwd www-data || adduser -S -H -D -u 82 -G www-data www-data
+
 #   put right
 RUN chown -R root:root /var/log/nginx
 RUN chown -R root:root /etc/nginx/ssl
-#RUN chown -R www-data:www-data /var/www/html
-#RUN chmod 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod 755 /var/www/html
 
 #   creating ssh certificat for TSL connection
-RUN openssl req \
-            -x509 \
-            -nodes \
-            -out /etc/nginx/ssl/nginx.crt \
-            -keyout /etc/nginx/ssl/nginx.key \
-            -subj "/C=LU/ST=IDF/L=Belval/O=42/OU=42/CN=nfordoxc.42.fr/UID=nfordoxc"
+#RUN openssl req \
+#            -x509 \
+#            -nodes \
+#            -out /etc/nginx/ssl/nginx.crt \
+#            -keyout /etc/nginx/ssl/nginx.key \
+#            -subj "/C=LU/ST=IDF/L=Belval/O=42/OU=42/CN=nfordoxc.42.fr/UID=nfordoxc"
 
 #   copy config file for nginx
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 #   copy script file for sshkey and entrypoint
-#COPY tools/generate_ssl.sh /scripts/generate_ssl.sh
+COPY tools/generate_ssl.sh /scripts/generate_ssl.sh
 COPY tools/entrypoint.sh /scripts/entrypoint.sh
 
 #   alow execution ok all scripts
 RUN chmod +x /scripts/*.sh
 
 #   entrypoint of the container
-#ENTRYPOINT ["/scripts/entrypoint.sh"]
-
-CMD ["nginx", "-g", "daemon off;" ]
+ENTRYPOINT ["/scripts/entrypoint.sh"]

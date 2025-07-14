@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/31 07:43:50 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/13 18:28:17 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/07/14 10:16:07 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ secrets:
 	@echo "🔐 Checking of all secrets..."
 	@if [ ! -d "$(SECRETS_DIR)" ] || [ ! -f "$(SECRETS_DIR)/db_root_pwd.txt" ]; then \
 		echo "🔧 Creating of secrets..."; \
-		srcs/generate_secrets.sh; \
+		./srcs/generate_secrets.sh; \
 	else \
 		echo "✅ Secrets ready"; \
 	fi
@@ -43,11 +43,11 @@ build:
 
 logs:
 	@echo "📜 Affichage des logs (Ctrl+C pour quitter)..."
-	@docker compose logs -f $(COMPOSE_FILE)
+	@docker compose -f $(COMPOSE_FILE) logs -f
 
 clean:
 	@echo "🧽 Nettoyage des volumes et ressources inutilisées..."
-	@docker volume rm $(shell docker volume ls -qf name=inception) || true
+	@docker volume rm $(shell docker volume ls -qf name=srcs) || true
 	@docker system prune -a --volumes -f
 
 re:					fclean \

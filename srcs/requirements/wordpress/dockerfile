@@ -27,7 +27,7 @@ RUN ln -sf /usr/bin/php84 /usr/bin/php
 
 RUN echo "memory_limit = 256M" >> /etc/php84/php.ini
 
-RUN wget -q -O		/usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+RUN wget -q -O		/usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
 RUN chmod +x		/usr/local/bin/wp
 
