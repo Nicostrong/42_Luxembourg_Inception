@@ -16,9 +16,7 @@ RUN getent group mysql || addgroup -S mysql
 RUN mkdir -p /var/lib/mysql
 RUN mkdir -p /run/mysqld
 RUN mkdir -p /scripts
-RUN chown -R mysql:mysql
-RUN chown -R /var/lib/mysql
-RUN chown -R /run/mysqld
+RUN chown -R mysql:mysql /var/lib/mysql /run/mysqld
 
 #   copy files
 COPY tools/setup_mariadb.sh /scripts/setup_mariadb.sh

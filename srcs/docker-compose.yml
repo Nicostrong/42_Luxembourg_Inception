@@ -2,9 +2,12 @@ services:
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
+    env_file:
+      - .env
     volumes:
       - mariadb_data:/var/lib/mysql
       - ../secrets:/run/secrets:ro
+      - .env:/run/secrets/.env:ro
     expose:
       - 3306
     networks:
@@ -14,9 +17,12 @@ services:
   wordpress:
     build: ./requirements/wordpress
     container_name: wordpress
+    env_file:
+      - .env 
     volumes:
       - wordpress_data:/var/www/html
       - ../secrets:/run/secrets:ro
+      - .env:/run/secrets/.env:ro
     expose:
       - 9000
     depends_on:
@@ -28,11 +34,14 @@ services:
   nginx:
     build: ./requirements/nginx
     container_name: nginx
-    ports:
-      - "443:443"
+    env_file:
+      - .env
     volumes:
       - wordpress_data:/var/www/html
       - ../secrets:/run/secrets:ro
+      - .env:/run/secrets/.env:ro
+    ports:
+      - "443:443"
     depends_on:
       - wordpress
     networks:

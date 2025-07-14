@@ -2,8 +2,8 @@
 
 set -e
 
-export DB_NAME=$(cat /run/secrets/db_name.txt)
-export DB_USER=$(cat /run/secrets/db_user.txt)
+source /run/secrets/.env 2>/dev/null || true
+
 export DB_PWD=$(cat /run/secrets/db_pwd.txt)
 export DB_ROOT_PWD=$(cat /run/secrets/db_root_pwd.txt)
 

@@ -1,2 +1,12 @@
 .DS_Store
 
+# Secrets
+secrets/
+.env
+
+# Fichiers temporaires
+*.tmp
+*.log
+
+# Volumes Docker locaux
+volumes/
