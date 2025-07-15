@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/31 07:43:50 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/15 16:02:38 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/15 18:00:22 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ secrets:
 
 down:
 	@echo "🧹 Arrêt des containers ..."
-	@docker compose -f $(COMPOSE_FILE) down
+	@docker compose -f $(COMPOSE_FILE) stop
 
 build:
 	@echo "🔧 Construction des images ..."
@@ -51,7 +51,7 @@ bonus_up:				setup
 
 bonus_down:
 	@echo "🧹 Arrêt des containers ..."
-	@docker compose -f $(COMPOSE_FILE_BONUS) down
+	@docker compose -f $(COMPOSE_FILE_BONUS) stop
 
 clean:
 	@echo "🧹 Suppression des secrets ..."
