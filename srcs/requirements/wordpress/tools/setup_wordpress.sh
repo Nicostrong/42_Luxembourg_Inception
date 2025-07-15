@@ -56,6 +56,9 @@ echo "USER_PWD $WP_USER_PWD"
 if wp redis status --allow-root --path="$WP_PATH" > /dev/null 2>&1; then
     echo "📦 Redis detected, enabling plugin..."
     wp plugin install redis-cache --activate --allow-root --path="$WP_PATH"
+    wp config set WP_REDIS_HOST "$REDIS_HOST" --allow-root --path="$WP_PATH"
+    wp config set WP_REDIS_PORT "$REDIS_PORT" --allow-root --path="$WP_PATH"
+    wp config set WP_CACHE true --allow-root --path="$WP_PATH"
     wp redis enable --allow-root --path="$WP_PATH"
 fi
 

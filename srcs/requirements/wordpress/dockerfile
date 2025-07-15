@@ -5,38 +5,38 @@ FROM alpine:3.21
 RUN apk update && apk upgrade
 
 #   installing some programs
-RUN  apk add --no-cache php84
-RUN  apk add --no-cache php84-fpm
-RUN  apk add --no-cache php84-cli
-RUN  apk add --no-cache php84-phar
-RUN  apk add --no-cache php84-mysqli
-RUN  apk add --no-cache php84-json
-RUN  apk add --no-cache php84-mbstring
-RUN  apk add --no-cache php84-xml
-RUN  apk add --no-cache fcgi
-RUN  apk add --no-cache curl
-RUN  apk add --no-cache bash
-RUN  apk add --no-cache wget
-RUN  apk add --no-cache netcat-openbsd
-RUN  apk add --no-cache mariadb-client
-RUN  apk add --no-cache vim
+RUN  apk add --no-cache				php84
+RUN  apk add --no-cache				php84-fpm
+RUN  apk add --no-cache				php84-cli
+RUN  apk add --no-cache				php84-phar
+RUN  apk add --no-cache				php84-mysqli
+RUN  apk add --no-cache				php84-json
+RUN  apk add --no-cache				php84-mbstring
+RUN  apk add --no-cache				php84-xml
+RUN  apk add --no-cache				fcgi
+RUN  apk add --no-cache				curl
+RUN  apk add --no-cache				bash
+RUN  apk add --no-cache				wget
+RUN  apk add --no-cache				netcat-openbsd
+RUN  apk add --no-cache				mariadb-client
+RUN  apk add --no-cache				vim
 
 RUN adduser -S -H -D -u 82 -G www-data www-data || true
 
-RUN ln -sf /usr/bin/php84 /usr/bin/php
+RUN ln -sf							/usr/bin/php84 /usr/bin/php
 
-RUN echo "memory_limit = 256M" >> /etc/php84/php.ini
+RUN echo "memory_limit = 256M" >>	/etc/php84/php.ini
 
-RUN wget -q -O		/usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN wget -q -O						/usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
-RUN chmod +x		/usr/local/bin/wp
+RUN chmod +x						/usr/local/bin/wp
 
-RUN mkdir -p	/var/www/html	/scripts
+RUN mkdir -p						/var/www/html	/scripts
 
-COPY tools/setup_wordpress.sh	/scripts/setup_wordpress.sh
-COPY tools/entrypoint.sh		/scripts/entrypoint.sh
-COPY conf/php-pool.conf			/scripts/php-pool.conf
+COPY tools/setup_wordpress.sh		/scripts/setup_wordpress.sh
+COPY tools/entrypoint.sh			/scripts/entrypoint.sh
+COPY conf/php-pool.conf				/scripts/php-pool.conf
 
-RUN chmod +x	/scripts/*.sh
+RUN chmod +x						/scripts/*.sh
 
 ENTRYPOINT ["/scripts/entrypoint.sh"]

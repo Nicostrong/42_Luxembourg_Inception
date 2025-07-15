@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/31 07:43:50 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/15 12:24:31 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/15 16:02:38 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ COMPOSE_FILE_BONUS	=	srcs/docker-compose.bonus.yml
 SECRETS_DIR			=	secrets
 ENV_FILE			=	srcs/.env
 
-.PHONY: up setup down logs bonus build clean re fclean
+.PHONY: up setup down logs bonus_up bonus_down build clean re fclean
 
 up:					setup
 	@echo "📦 Création et déploiement des containers ..."
@@ -45,10 +45,14 @@ logs:
 	@echo "📜 Affichage des logs (Ctrl+C pour quitter) ..."
 	@docker compose -f $(COMPOSE_FILE) logs -f
 
-bonus:				setup
+bonus_up:				setup
 	@echo "🎁 Activation des services bonus (Redis)..."
 	@docker compose -f $(COMPOSE_FILE_BONUS) up -d --build
-	
+
+bonus_down:
+	@echo "🧹 Arrêt des containers ..."
+	@docker compose -f $(COMPOSE_FILE_BONUS) down
+
 clean:
 	@echo "🧹 Suppression des secrets ..."
 	@rm -dRf ./secrets
@@ -60,4 +64,5 @@ re:					fclean \
 					up
 
 fclean:				down \
+					bonus_down \
 					clean

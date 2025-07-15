@@ -4,19 +4,18 @@ FROM alpine:3.21
 RUN apk update && apk upgrade
 
 #   installing some programs
-RUN  apk add --no-cache redis
-RUN  apk add --no-cache bash
-RUN  apk add --no-cache tini
+RUN apk add --no-cache	redis
+RUN apk add --no-cache	bash
+
+#   creating some directory
+RUN mkdir -p			/scripts
+RUN mkdir -p			/data
 
 #	copy config file
-COPY  ./tools/redis.conf /etc/redis.conf
+COPY					conf/redis.conf /etc/redis/redis.conf
+COPY					tools/entrypoint.sh /scripts/entrypoint.sh
 
-#	creating data directory
-RUN  mkdir -p /data
-RUN  chown redis:redis /data
+#   put right
+RUN chmod +x			/scripts/entrypoint.sh
 
-USER  redis
-
-ENTRYPOINT [ "/sbin/tini", "--" ]
-
-CMD [ "redis-server", "--protected-mode" , "no"]
+ENTRYPOINT [ "/scripts/entrypoint.sh" ]

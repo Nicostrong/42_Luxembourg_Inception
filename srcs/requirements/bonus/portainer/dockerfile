@@ -1,0 +1,28 @@
+#   os of the container not the latest
+FROM alpine:3.21
+
+#   update and upgrade of apk
+RUN apk update && apk upgrade
+
+#   installing some programs
+RUN apk add --no-cache		curl
+RUN apk add --no-cache		tar
+RUN apk add --no-cache		bash
+
+#   creating some directory
+RUN mkdir -p 				/scripts
+RUN mkdir -p 				/var/lib/portainer
+
+#   copy file for portainer
+COPY tools/entrypoint.sh	/scripts/entrypoint.sh
+COPY tools/portainer.tar.gz	/tmp/entrypoint.sh
+RUN tar -xzf				/tmp/portainer.tar.gz -C /usr/local
+RUN rm						/tmp/portainer.tar.gz
+
+#   alow execution ok all scripts
+RUN chmod +x				/scripts/entrypoint.sh
+
+VOLUME ["/var/lib/portainer"]
+
+#   entrypoint of the container
+ENTRYPOINT ["/scripts/entrypoint.sh"]

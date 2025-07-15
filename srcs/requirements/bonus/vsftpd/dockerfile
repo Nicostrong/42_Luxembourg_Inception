@@ -1,0 +1,25 @@
+#   os of the container not the latest
+FROM alpine:3.21
+
+#   update and upgrade of apk
+RUN apk update && apk upgrade
+
+#   installing some programs
+RUN apk add --no-cache		vsftpd
+RUN apk add --no-cache		bash
+
+#   creating some directory
+RUN mkdir -p				/scripts
+RUN mkdir -p				/var/ftp
+RUN mkdir					/var/log/vsftpd
+
+#   copy config file for vsftpd
+COPY conf/vsftpd.conf		/etc/vsftpd.conf
+COPY tools/entrypoint.sh	/scripts/entrypoint.sh
+
+#   put right
+RUN chmod +x				/scripts/entrypoint.sh
+
+EXPOSE 20 21 30000-30009
+
+ENTRYPOINT ["/scripts/entrypoint.sh"]

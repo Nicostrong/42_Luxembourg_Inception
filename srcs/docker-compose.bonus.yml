@@ -78,6 +78,51 @@ services:
     container_name: redis
     expose:
       - 6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - inception_network
+    restart: always
+
+  vsftpd:
+    build: ./requirements/bonus/vsftpd
+    container_name: vsftpd
+    env_file:
+      - .env
+    volumes:
+      - wordpress_data:/var/www/html
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    depends_on:
+      - wordpress
+    networks:
+      - inception_network
+    restart: always
+  
+  adminer:
+    build: ./requirements/bonus/adminer
+    container_name: adminer
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
+    networks:
+      - inception_network
+    restart: always
+  
+  portainer:
+    build: ./requirements/bonus/portainer
+    container_name: portainer
+    env_file:
+      - .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/var/lib/portainer
+    ports:
+      - "9000:9000"
     networks:
       - inception_network
     restart: always
@@ -92,3 +137,8 @@ volumes:
     driver: local
   wordpress_data:
     driver: local
+  redis_data:
+    driver: local
+  portainer_data:
+    driver: local
+
