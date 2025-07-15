@@ -23,6 +23,8 @@ if [ ! -f "$WP_PATH/wp-config.php" ]; then
 define( 'WP_DEBUG', false );
 define( 'DISALLOW_FILE_EDIT', true );
 define( 'AUTOMATIC_UPDATER_DISABLED', true );
+define('WP_HOME', 'https://nfordoxc.42.fr');
+define('WP_SITEURL', 'https://nfordoxc.42.fr');
 PHP
 
     if ! wp core is-installed --allow-root --path="$WP_PATH"; then

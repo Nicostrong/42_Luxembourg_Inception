@@ -23,5 +23,7 @@ fi
 echo "✅ SSL ready. Testing nginx config..."
 nginx -t
 
+echo "✅ Rename the hostname..."
+echo "127.0.0.1 "$DOMAIN_NAME"" >> /etc/hosts
 echo "🚀 Launching nginx..."
 exec nginx -g "daemon off;"
