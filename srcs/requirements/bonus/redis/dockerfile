@@ -1,0 +1,22 @@
+FROM alpine:3.21
+
+#   update and upgrade of apk
+RUN apk update && apk upgrade
+
+#   installing some programs
+RUN  apk add --no-cache redis
+RUN  apk add --no-cache bash
+RUN  apk add --no-cache tini
+
+#	copy config file
+COPY  ./tools/redis.conf /etc/redis.conf
+
+#	creating data directory
+RUN  mkdir -p /data
+RUN  chown redis:redis /data
+
+USER  redis
+
+ENTRYPOINT [ "/sbin/tini", "--" ]
+
+CMD [ "redis-server", "--protected-mode" , "no"]

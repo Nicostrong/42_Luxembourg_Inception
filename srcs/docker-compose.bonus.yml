@@ -6,8 +6,9 @@ services:
     env_file:
       - .env
     volumes:
+      # à décommenter à l'école :
+      # - /home/nfordoxc/data/wordpress:/var/www/html
       - wordpress_data:/var/www/html
-      #- /home/nfordoxc/data/wordpress:/var/www/html  to uncomment at school
       - ../secrets:/run/secrets:ro
     ports:
       - "443:443"
@@ -22,26 +23,31 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
-  
+
   wordpress:
     build: ./requirements/wordpress
     container_name: wordpress
     env_file:
       - .env 
     volumes:
+      # à décommenter à l'école :
+      # - /home/nfordoxc/data/wordpress:/var/www/html
       - wordpress_data:/var/www/html
-      #- /home/nfordoxc/data/wordpress:/var/www/html  to uncomment at school
       - ../secrets:/run/secrets:ro
     expose:
       - 9000
     depends_on:
       mariadb:
         condition: service_healthy
+      redis:
+        condition: service_started
     healthcheck:
       test: ["CMD", "php", "-r", "if(!fsockopen('localhost', 9000)) exit(1);"]
       interval: 10s
       timeout: 5s
       retries: 5
+    environment:
+      - REDIS_HOST=redis
     networks:
       - inception_network
     restart: always
@@ -52,8 +58,9 @@ services:
     env_file:
       - .env
     volumes:
+      # à décommenter à l'école :
+      # - /home/nfordoxc/data/mariadb:/var/lib/mysql
       - mariadb_data:/var/lib/mysql
-      #- /home/nfordoxc/data/mariadb:/var/lib/mysql to uncomment at school
       - ../secrets:/run/secrets:ro
     expose:
       - 3306
@@ -66,11 +73,20 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    build: ./requirements/bonus/redis
+    container_name: redis
+    expose:
+      - 6379
+    networks:
+      - inception_network
+    restart: always
+
 networks:
   inception_network:
     driver: bridge
 
-# partie a supprimer at school
+# partie à supprimer à l'école
 volumes:
   mariadb_data:
     driver: local

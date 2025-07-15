@@ -35,6 +35,7 @@ RUN mkdir -p	/var/www/html	/scripts
 
 COPY tools/setup_wordpress.sh	/scripts/setup_wordpress.sh
 COPY tools/entrypoint.sh		/scripts/entrypoint.sh
+COPY conf/php-pool.conf			/scripts/php-pool.conf
 
 RUN chmod +x	/scripts/*.sh
 
