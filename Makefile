@@ -6,7 +6,7 @@
 #    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/31 07:43:50 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/15 18:00:22 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/07/16 07:00:01 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,12 +26,12 @@ setup:				secrets
 
 secrets:
 	@echo "🔐 Checking of all secrets ..."
-	@if [ ! -d "$(SECRETS_DIR)" ] || [ ! -f "$(SECRETS_DIR)/db_root_pwd.txt" ]; then \
-		echo "🔧 Creating of secrets ..."; \
-		./srcs/generate_secrets.sh; \
-	else \
-		echo "✅ Secrets ready"; \
-	fi
+	@if [ ! -d "$(SECRETS_DIR)" ] || [ $$(find "$(SECRETS_DIR)" -maxdepth 1 -type f -name "*.txt" | wc -l) -ne 5 ]; then \
+        echo "🔧 Creating of secrets ..."; \
+        ./srcs/generate_secrets.sh; \
+    else \
+        echo "✅ All 5 secrets are ready"; \
+    fi
 
 down:
 	@echo "🧹 Arrêt des containers ..."
