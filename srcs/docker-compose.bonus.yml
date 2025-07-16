@@ -6,10 +6,9 @@ services:
     env_file:
       - .env
     volumes:
-      # à décommenter à l'école :
-      # - /home/nfordoxc/data/wordpress:/var/www/html
-      # - wordpress_data:/var/www/html
-      - /home/nicostrong/data/wordpress:/var/www/html
+      # - /home/nfordoxc/data/wordpress:/var/www/html       # dans la vm
+      # - wordpress_data:/var/www/html                      # surle mac
+      - /home/nicostrong/data/wordpress:/var/www/html       # sur le ubunmac
       - ../secrets:/run/secrets:ro
     ports:
       - "443:443"
@@ -31,10 +30,9 @@ services:
     env_file:
       - .env 
     volumes:
-      # à décommenter à l'école :
-      # - /home/nfordoxc/data/wordpress:/var/www/html
-      # - wordpress_data:/var/www/html
-      - /home/nicostrong/data/wordpress:/var/www/html
+      # - /home/nfordoxc/data/wordpress:/var/www/html       # dans la vm
+      # - wordpress_data:/var/www/html                      # surle mac
+      - /home/nicostrong/data/wordpress:/var/www/html       # sur le ubunmac
       - ../secrets:/run/secrets:ro
     expose:
       - 9000
@@ -60,10 +58,9 @@ services:
     env_file:
       - .env
     volumes:
-      # à décommenter à l'école :
-      # - /home/nfordoxc/data/mariadb:/var/lib/mysql
-      # - mariadb_data:/var/lib/mysql
-      - /home/nicostrong/data/mariadb:/var/lib/mysql
+      # - /home/nfordoxc/data/mariadb:/var/lib/mysql      # dans la vm
+      # - mariadb_data:/var/lib/mysql                     # sur le mac
+      - /home/nicostrong/data/mariadb:/var/lib/mysql      # sur ubunmac
       - ../secrets:/run/secrets:ro
     expose:
       - 3306
@@ -79,11 +76,15 @@ services:
   redis:
     build: ./requirements/bonus/redis
     container_name: redis
+    env_file:
+      - .env
+    volumes:
+      # - /home/nfordoxc/data/redis:/data                 # sur la vm
+      # - redis_data:/data                                # sur le mac
+      - /home/nicostrong/data/redis:/data                 # sur ubunmac
+      - ../secrets:/run/secrets:ro
     expose:
       - 6379
-    volumes:
-      # - redis_data:/data
-      - /home/nicostrong/data/redis:/data
     networks:
       - inception_network
     restart: always
@@ -94,8 +95,10 @@ services:
     env_file:
       - .env
     volumes:
-      # - wordpress_data:/var/www/html
-      - /home/nicostrong/data/wordpress:/var/www/html
+      # - /home/nfordoxc/data/wordpress:/var/www/html     # sur la vm
+      # - wordpress_data:/var/www/html                    # sur le mac
+      - /home/nicostrong/data/wordpress:/var/www/html     # sur ubunmac
+      - ../secrets:/run/secrets:ro
     ports:
       - "21:21"
       - "30000-30009:30000-30009"
@@ -110,6 +113,8 @@ services:
     container_name: adminer
     env_file:
       - .env
+    volumes:
+      - ../secrets:/run/secrets:ro
     ports:
       - "8080:8080"
     depends_on:
@@ -124,11 +129,14 @@ services:
     env_file:
       - .env
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      # - portainer_data:/var/lib/portainer
-      - /home/nicostrong/data/portainer:/var/lib/portainer
+      - /var/run/docker.sock:/var/run/docker.sock             # socket de communication avec docker
+      # - /home/nfordoxc/data/portainer:/var/lib/portainer    # sur la vm
+      # - portainer_data:/var/lib/portainer                   # sur le mac
+      - /home/nicostrong/data/portainer:/var/lib/portainer    # sur ubunmac
+      - ../secrets:/run/secrets:ro
     ports:
-      - "9000:9000"
+      - "9010:9010"
+      - "9446:9446"
     networks:
       - inception_network
     restart: always
@@ -138,13 +146,13 @@ networks:
     driver: bridge
 
 # partie à supprimer à l'école
-volumes:
-  mariadb_data:
-    driver: local
-  wordpress_data:
-    driver: local
-  redis_data:
-    driver: local
-  portainer_data:
-    driver: local
+#volumes:
+#  mariadb_data:
+#    driver: local
+#  wordpress_data:
+#    driver: local
+#  redis_data:
+#    driver: local
+#  portainer_data:
+#    driver: local
 

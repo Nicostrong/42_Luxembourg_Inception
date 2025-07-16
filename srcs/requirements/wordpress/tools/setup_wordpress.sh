@@ -50,8 +50,8 @@ fi
 
 echo "👥 Listing WordPress users:"
 wp user list --allow-root --path="$WP_PATH"
-echo "ADMIN_PWD $WP_ADMIN_PWD"
-echo "USER_PWD $WP_USER_PWD"
+echo "ADMIN $WP_ADMIN   | ADMIN_PWD $WP_ADMIN_PWD"
+echo "USER  $WP_USER        | USER_PWD $WP_USER_PWD"
 
 if wp redis status --allow-root --path="$WP_PATH" > /dev/null 2>&1; then
     echo "📦 Redis detected, enabling plugin..."

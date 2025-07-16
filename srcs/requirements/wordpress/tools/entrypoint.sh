@@ -31,6 +31,10 @@ export WP_USER_PWD=$(cat /run/secrets/wp_user_pwd.txt)
 echo "⚙️ Configuring PHP-FPM..."
 cp /scripts/php-pool.conf /etc/php84/php-fpm.d/www.conf
 
+echo "🔧 Fixing ownership of WordPress folder..."
+chown -R www-data:www-data /var/www/html
+chmod -R 770 /var/www/html
+
 echo "⚙️ Configuring WordPress..."
 sh /scripts/setup_wordpress.sh
 

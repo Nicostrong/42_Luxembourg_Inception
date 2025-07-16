@@ -6,9 +6,9 @@ services:
     env_file:
       - .env
     volumes:
-      #- wordpress_data:/var/www/html to test on mac
-      #- /home/nfordoxc/data/wordpress:/var/www/html  to uncomment at school
-      - /home/nicostrong/data/wordpress:/var/www/html
+      # - /home/nfordoxc/data/wordpress:/var/www/html       # dans la vm
+      # - wordpress_data:/var/www/html                      # surle mac
+      - /home/nicostrong/data/wordpress:/var/www/html       # sur le ubunmac
       - ../secrets:/run/secrets:ro
     ports:
       - "443:443"
@@ -30,9 +30,9 @@ services:
     env_file:
       - .env 
     volumes:
-      #- wordpress_data:/var/www/html
-      #- /home/nfordoxc/data/wordpress:/var/www/html  to uncomment at school
-      - /home/nicostrong/data/wordpress:/var/www/html
+      # - /home/nfordoxc/data/wordpress:/var/www/html       # dans la vm
+      # - wordpress_data:/var/www/html                      # surle mac
+      - /home/nicostrong/data/wordpress:/var/www/html       # sur le ubunmac
       - ../secrets:/run/secrets:ro
     expose:
       - 9000
@@ -54,9 +54,9 @@ services:
     env_file:
       - .env
     volumes:
-      #- mariadb_data:/var/lib/mysql
-      #- /home/nfordoxc/data/mariadb:/var/lib/mysql to uncomment at school
-      - /home/nicostrong/data/mariadb:/var/lib/mysql
+      # - /home/nfordoxc/data/mariadb:/var/lib/mysql      # dans la vm
+      # - mariadb_data:/var/lib/mysql                     # sur le mac
+      - /home/nicostrong/data/mariadb:/var/lib/mysql      # sur ubunmac
       - ../secrets:/run/secrets:ro
     expose:
       - 3306

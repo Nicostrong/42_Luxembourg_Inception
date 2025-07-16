@@ -21,7 +21,7 @@ WORKDIR						/var/www/html
 
 #	copy some files
 COPY tools/entrypoint.sh	/scripts/entrypoint.sh
-COPY tools/adminer.php      /var/www/html/adminier.php
+COPY tools/adminer.php      /var/www/html/adminer.php
 RUN chmod 644 /var/www/html/adminer.php
 
 #	put some right
