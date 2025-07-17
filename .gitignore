@@ -2,7 +2,7 @@
 
 # Secrets
 secrets/
-.env
+#.env
 
 # Fichiers temporaires
 *.tmp
