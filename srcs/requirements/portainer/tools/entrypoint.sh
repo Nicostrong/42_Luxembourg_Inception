@@ -18,5 +18,5 @@ echo -e "\e[1;32m🔐 Mot de passe utilise : \e[1;37m$PORTAINER_PWD\e[0m"
 echo "🚀 Starting Portainer..."
 exec    /usr/local/portainer/portainer \
         --bind=:"$PORTAINER_PORT" \
-        --data=/var/lib/portainer \
-        --admin-password="$PORTAINER_PWD"
+        --data=/var/lib/portainer #\
+        #--admin-password="$PORTAINER_PWD"

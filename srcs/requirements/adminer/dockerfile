@@ -5,11 +5,11 @@ FROM alpine:3.21
 RUN apk update && apk upgrade
 
 #	installing some programs
-RUN apk add --no-cache		php84
-RUN apk add --no-cache		php84-session
-RUN apk add --no-cache		php84-mysqli
-RUN apk add --no-cache		php84-pdo
-RUN apk add --no-cache		php84-pdo_mysql
+RUN apk add --no-cache		php82
+RUN apk add --no-cache		php82-session
+RUN apk add --no-cache		php82-mysqli
+RUN apk add --no-cache		php82-pdo
+RUN apk add --no-cache		php82-pdo_mysql
 RUN apk add --no-cache		curl
 RUN apk add --no-cache		bash
 
@@ -22,9 +22,8 @@ RUN curl -Lo				/var/www/html/adminer.php https://github.com/vrana/adminer/relea
 #	copy some files
 COPY 						tools/entrypoint.sh	/scripts/entrypoint.sh
 
-RUN chmod 644				/var/www/html/adminer.php
-
 #	put some right
-RUN chmod +x /scripts/entrypoint.sh
+RUN chmod 644				/var/www/html/adminer.php
+RUN chmod +x                /scripts/entrypoint.sh
 
 ENTRYPOINT [ "/scripts/entrypoint.sh" ]

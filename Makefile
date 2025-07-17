@@ -6,7 +6,7 @@
 #    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/31 07:43:50 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/16 07:00:01 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/07/17 20:08:58 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,9 +47,9 @@ logs:
 clean:
 	@echo "🧹 Suppression des secrets ..."
 	@rm -dRf ./secrets
-	@echo "🧽 Nettoyage des volumes et ressources inutilisées..."
-	@docker volume rm $(shell docker volume ls -qf name=srcs) || true
-	@docker system prune -a --volumes -f
+#	@echo "🧽 Nettoyage des volumes et ressources inutilisées..."
+#	@docker volume rm $(shell docker volume ls -qf name=srcs) || true
+#	@docker system prune -a --volumes -f
 
 re:					fclean \
 					up
