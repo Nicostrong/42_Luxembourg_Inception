@@ -13,16 +13,10 @@ export PORTAINER_PWD=$(cat /run/secrets/portainer_pwd.txt)
 [ -z "$PORTAINER_USER" ] && echo "❌ PORTAINER_USER not set" && exit 1
 [ -z "$PORTAINER_MAIL" ] && echo "❌ PORTAINER_MAIL not set" && exit 1
 
-# Inject into config file (inline sed or jq)
-CONFIG_PATH=/etc/portainer-config.json
-if [ -f "$CONFIG_PATH" ]; then
-    sed -i "s|{{ADMIN_NAME}}|$PORTAINER_USER|" "$CONFIG_PATH"
-    sed -i "s|{{ADMIN_PASSWORD}}|$PORTAINER_PWD|" "$CONFIG_PATH"
-    sed -i "s|{{ADMIN_EMAIL}}|$PORTAINER_MAIL|" "$CONFIG_PATH"
-fi
+echo -e "\e[1;32m🔐 Mot de passe utilise : \e[1;37m$PORTAINER_PWD\e[0m"
 
 echo "🚀 Starting Portainer..."
 exec    /usr/local/portainer/portainer \
         --bind=:"$PORTAINER_PORT" \
         --data=/var/lib/portainer \
-        --admin-password="$ADMIN_PASSWORD"
+        --admin-password="$PORTAINER_PWD"

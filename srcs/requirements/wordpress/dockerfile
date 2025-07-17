@@ -21,7 +21,7 @@ RUN  apk add --no-cache				netcat-openbsd
 RUN  apk add --no-cache				mariadb-client
 RUN  apk add --no-cache				vim
 
-RUN adduser -S -H -D -u 82 -G www-data www-data || true
+RUN adduser -S -H -D -u 33 -G www-data www-data || true
 
 RUN ln -sf							/usr/bin/php84 /usr/bin/php
 

@@ -145,7 +145,7 @@ services:
       # - /home/nicostrong/data/portainer:/var/lib/portainer  # sur ubunmac
       - ../secrets:/run/secrets:ro
     ports:
-      - "9010:9010"
+      - "9443:9443"
     networks:
       - inception_network
     restart: always

@@ -21,7 +21,6 @@ RUN rm                      /tmp/portainer.tar.gz
 
 #   copy file for portainer
 COPY tools/entrypoint.sh	        /scripts/entrypoint.sh
-COPY config/portainer-config.json   /etc/portainer-config.json
 
 #   alow execution ok all scripts
 RUN chmod +x				        /scripts/entrypoint.sh
