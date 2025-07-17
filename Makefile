@@ -11,11 +11,10 @@
 # **************************************************************************** #
 
 COMPOSE_FILE		=	srcs/docker-compose.yml
-COMPOSE_FILE_BONUS	=	srcs/docker-compose.bonus.yml
 SECRETS_DIR			=	secrets
 ENV_FILE			=	srcs/.env
 
-.PHONY: up setup down logs bonus_up bonus_down build clean re fclean
+.PHONY: up setup down logs build clean re fclean
 
 up:					setup
 	@echo "📦 Création et déploiement des containers ..."
@@ -26,11 +25,11 @@ setup:				secrets
 
 secrets:
 	@echo "🔐 Checking of all secrets ..."
-	@if [ ! -d "$(SECRETS_DIR)" ] || [ $$(find "$(SECRETS_DIR)" -maxdepth 1 -type f -name "*.txt" | wc -l) -ne 5 ]; then \
+	@if [ ! -d "$(SECRETS_DIR)" ] || [ $$(find "$(SECRETS_DIR)" -maxdepth 1 -type f -name "*.txt" | wc -l) -ne 6 ]; then \
         echo "🔧 Creating of secrets ..."; \
         ./srcs/generate_secrets.sh; \
     else \
-        echo "✅ All 5 secrets are ready"; \
+        echo "✅ All 6 secrets are ready"; \
     fi
 
 down:
@@ -45,14 +44,6 @@ logs:
 	@echo "📜 Affichage des logs (Ctrl+C pour quitter) ..."
 	@docker compose -f $(COMPOSE_FILE) logs -f
 
-bonus_up:				setup
-	@echo "🎁 Activation des services bonus (Redis)..."
-	@docker compose -f $(COMPOSE_FILE_BONUS) up -d --build
-
-bonus_down:
-	@echo "🧹 Arrêt des containers ..."
-	@docker compose -f $(COMPOSE_FILE_BONUS) stop
-
 clean:
 	@echo "🧹 Suppression des secrets ..."
 	@rm -dRf ./secrets
@@ -64,5 +55,4 @@ re:					fclean \
 					up
 
 fclean:				down \
-					bonus_down \
 					clean

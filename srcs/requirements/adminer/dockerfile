@@ -1,0 +1,30 @@
+#	os of the container not the latest
+FROM alpine:3.21
+
+#	update and upgrade of apk
+RUN apk update && apk upgrade
+
+#	installing some programs
+RUN apk add --no-cache		php84
+RUN apk add --no-cache		php84-session
+RUN apk add --no-cache		php84-mysqli
+RUN apk add --no-cache		php84-pdo
+RUN apk add --no-cache		php84-pdo_mysql
+RUN apk add --no-cache		curl
+RUN apk add --no-cache		bash
+
+#	creating some directory
+RUN mkdir -p				/scripts
+RUN mkdir -p				/var/www/html
+
+RUN curl -Lo				/var/www/html/adminer.php https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php
+
+#	copy some files
+COPY 						tools/entrypoint.sh	/scripts/entrypoint.sh
+
+RUN chmod 644				/var/www/html/adminer.php
+
+#	put some right
+RUN chmod +x /scripts/entrypoint.sh
+
+ENTRYPOINT [ "/scripts/entrypoint.sh" ]

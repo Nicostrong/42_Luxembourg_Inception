@@ -1,0 +1,32 @@
+#   os of the container not the latest
+FROM alpine:3.21
+
+#   create env variable
+ENV PORTAINER_VERSION=2.20.2
+
+#   update and upgrade of apk
+RUN apk update && apk upgrade
+
+#   installing some programs
+RUN apk add --no-cache		curl
+RUN apk add --no-cache		tar
+RUN apk add --no-cache		bash
+
+#   creating some directory
+RUN mkdir   -p 				/scripts
+RUN mkdir   -p 				/var/lib/portainer
+RUN curl    -L              "https://github.com/portainer/portainer/releases/download/${PORTAINER_VERSION}/portainer-${PORTAINER_VERSION}-linux-amd64.tar.gz" -o /tmp/portainer.tar.gz
+RUN tar     -xzf            /tmp/portainer.tar.gz -C /usr/local
+RUN rm                      /tmp/portainer.tar.gz
+
+#   copy file for portainer
+COPY tools/entrypoint.sh	        /scripts/entrypoint.sh
+COPY config/portainer-config.json   /etc/portainer-config.json
+
+#   alow execution ok all scripts
+RUN chmod +x				        /scripts/entrypoint.sh
+
+VOLUME ["/var/lib/portainer"]
+
+#   entrypoint of the container
+ENTRYPOINT ["/scripts/entrypoint.sh"]

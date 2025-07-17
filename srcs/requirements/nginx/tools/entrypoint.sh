@@ -12,7 +12,13 @@ else
 fi
 
 echo "✅ SSL ready. Testing nginx config..."
-nginx -t
+
+if nginx -t; then
+  echo "✅ Nginx configuration is valid."
+else
+  echo "❌ Nginx configuration error. Please fix the config and retry."
+  exit 1
+fi
 
 echo "✅ Rename the hostname..."
 echo "127.0.0.1 "$DOMAIN_NAME"" >> /etc/hosts

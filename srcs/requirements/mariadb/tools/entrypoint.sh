@@ -23,9 +23,15 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 	su-exec mysql mariadbd --skip-networking --socket=/run/mysqld/mysqld.sock & pid=$!
 
 	echo "⌛ Waiting for MariaDB to be ready..."
-	until mariadb-admin ping --socket=/run/mysqld/mysqld.sock --silent; do
-		sleep 10
+	for i in {1..5}; do
+		mariadb-admin ping --socket=/run/mysqld/mysqld.sock --silent && break
+		sleep 2
 	done
+
+	if ! mariadb-admin ping --socket=/run/mysqld/mysqld.sock --silent; then
+		echo "❌ MariaDB did not start in time." >&2
+		exit 1
+	fi
 
 	echo "🔧 Running setup script..."
 	/scripts/setup_mariadb.sh

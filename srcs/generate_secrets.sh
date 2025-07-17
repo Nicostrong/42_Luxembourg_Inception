@@ -9,6 +9,7 @@ echo "$(openssl rand -base64 32)" > ./secrets/db_pwd.txt
 echo "$(openssl rand -base64 32)" > ./secrets/wp_admin_pwd.txt
 echo "$(openssl rand -base64 32)" > ./secrets/wp_user_pwd.txt
 echo "$(openssl rand -base64 32)" > ./secrets/ftp_pwd.txt
+echo "$(openssl rand -base64 32)" > ./secrets/portainer_pwd.txt
 
 chmod 600 ./secrets/*.txt
 
