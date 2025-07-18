@@ -1,33 +1,52 @@
-#   os of the container not the latest
-FROM alpine:3.21
+#   os of the container not the latest with php
+FROM php:8.2-fpm-alpine
 
 #   update and upgrade of apk
 RUN apk update && apk upgrade
 
 #   installing some programs
-RUN  apk add --no-cache				php84
-RUN  apk add --no-cache				php84-fpm
-RUN  apk add --no-cache				php84-cli
-RUN  apk add --no-cache				php84-phar
-RUN  apk add --no-cache				php84-mysqli
-RUN  apk add --no-cache				php84-json
-RUN  apk add --no-cache				php84-mbstring
-RUN  apk add --no-cache				php84-xml
-RUN  apk add --no-cache				fcgi
-RUN  apk add --no-cache				curl
-RUN  apk add --no-cache				bash
-RUN  apk add --no-cache				wget
-RUN  apk add --no-cache				netcat-openbsd
-RUN  apk add --no-cache				mariadb-client
-RUN  apk add --no-cache				vim
+RUN apk add --no-cache              bash
+RUN apk add --no-cache              curl
+RUN apk add --no-cache              wget
+RUN apk add --no-cache              unzip
+RUN apk add --no-cache              mariadb-client
+RUN apk add --no-cache              netcat-openbsd
+RUN apk add --no-cache              vim
+RUN apk add --no-cache              gcc
+RUN apk add --no-cache              g++
+RUN apk add --no-cache              make
+RUN apk add --no-cache              autoconf
+RUN apk add --no-cache              libc-dev
+RUN apk add --no-cache              linux-headers
+RUN apk add --no-cache              re2c
+RUN apk add --no-cache              libxml2-dev
+RUN apk add --no-cache              oniguruma-dev
+RUN apk add --no-cache              libzip-dev
 
-RUN adduser -S -H -D -u 33 -G www-data www-data || true
+#   instzlling PHP extensions
+RUN docker-php-ext-install          mysqli
+RUN docker-php-ext-install          mbstring
+RUN docker-php-ext-install          xml
+RUN docker-php-ext-install          session
+RUN docker-php-ext-install          zip
 
-RUN ln -sf							/usr/bin/php84 /usr/bin/php
+#   installing Redis
+RUN pecl install                    redis
+RUN docker-php-ext-enable           redis
+RUN apk del                         gcc g++ make autoconf libc-dev linux-headers re2c libxml2-dev
 
-RUN echo "memory_limit = 256M" >>	/etc/php84/php.ini
+#   installing WP-CLI
+RUN curl -O                         https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x                        wp-cli.phar
+RUN mv                              wp-cli.phar /usr/local/bin/wp
 
-RUN wget -q -O						/usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+#   creating new user and new group if not exist
+RUN deluser                         www-data || true
+RUN delgroup                        www-data || true
+RUN addgroup -g                     33 www-data
+RUN adduser -S -H -D -u             33 -G www-data www-data
+
+RUN echo "memory_limit = 256M" >> /usr/local/etc/php/php.ini
 
 RUN chmod +x						/usr/local/bin/wp
 

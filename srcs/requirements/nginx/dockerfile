@@ -23,8 +23,10 @@ RUN touch					/var/log/nginx/access.log
 RUN touch					/var/log/nginx/error.log
 
 #   creating new user and new group if not exist
-RUN getent group www-data || addgroup -S www-data
-RUN getent passwd www-data || adduser -S -H -D -u 33 -G www-data www-data
+RUN deluser                         www-data || true
+RUN delgroup                        www-data || true
+RUN addgroup -g                     33 www-data
+RUN adduser -S -H -D -u             33 -G www-data www-data
 
 #   put right
 RUN chown -R				root:root /var/log/nginx

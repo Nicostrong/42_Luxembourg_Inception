@@ -29,14 +29,14 @@ export WP_USER_PWD=$(cat /run/secrets/wp_user_pwd.txt)
 [ -z "$REDIS_DB" ] && echo "❌ REDI_DB not set" && exit 1
 
 echo "⚙️ Configuring PHP-FPM..."
-cp /scripts/php-pool.conf /etc/php84/php-fpm.d/www.conf
+cp /scripts/php-pool.conf /usr/local/etc/php-fpm.d/www.conf
 
 echo "🔧 Fixing ownership of WordPress folder..."
 chown -R www-data:www-data /var/www/html
-chmod -R 770 /var/www/html
+chmod -R 775 /var/www/html
 
 echo "⚙️ Configuring WordPress..."
 sh /scripts/setup_wordpress.sh
 
 echo "🚀 Starting php-fpm..."
-exec php-fpm84 -F
+exec php-fpm -F

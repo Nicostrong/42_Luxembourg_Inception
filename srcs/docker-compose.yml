@@ -6,8 +6,8 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/nfordoxc/data/wordpress:/var/www/html         # dans la vm
-      # - wordpress_data:/var/www/html                      # surle mac
+      # - /home/nfordoxc/data/wordpress:/var/www/html         # dans la vm
+      - wordpress_data:/var/www/html                      # surle mac
       # - /home/nicostrong/data/wordpress:/var/www/html     # sur le ubunmac
       - ../secrets:/run/secrets:ro
     ports:
@@ -32,8 +32,8 @@ services:
     env_file:
       - .env 
     volumes:
-      - /home/nfordoxc/data/wordpress:/var/www/html         # dans la vm
-      # - wordpress_data:/var/www/html                      # surle mac
+      # - /home/nfordoxc/data/wordpress:/var/www/html         # dans la vm
+      - wordpress_data:/var/www/html                      # surle mac
       # - /home/nicostrong/data/wordpress:/var/www/html     # sur le ubunmac
       - ../secrets:/run/secrets:ro
     expose:
@@ -42,6 +42,8 @@ services:
       mariadb:
         condition: service_healthy
       adminer:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "php", "-r", "if(!fsockopen('localhost', 9000)) exit(1);"]
@@ -58,8 +60,8 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/nfordoxc/data/mariadb:/var/lib/mysql        # dans la vm
-      # - mariadb_data:/var/lib/mysql                     # sur le mac
+      # - /home/nfordoxc/data/mariadb:/var/lib/mysql        # dans la vm
+      - mariadb_data:/var/lib/mysql                     # sur le mac
       # - /home/nicostrong/data/mariadb:/var/lib/mysql    # sur ubunmac
       - ../secrets:/run/secrets:ro
     expose:
@@ -80,8 +82,8 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/nfordoxc/data/redis:/data                   # sur la vm
-      # - redis_data:/data                                # sur le mac
+      # - /home/nfordoxc/data/redis:/data                   # sur la vm
+      - redis_data:/data                                # sur le mac
       # - /home/nicostrong/data/redis:/data               # sur ubunmac
       - ../secrets:/run/secrets:ro
     expose:
@@ -101,8 +103,8 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/nfordoxc/data/wordpress:/var/www/html       # sur la vm
-      # - wordpress_data:/var/www/html                    # sur le mac
+      # - /home/nfordoxc/data/wordpress:/var/www/html       # sur la vm
+      - wordpress_data:/var/www/html                    # sur le mac
       # - /home/nicostrong/data/wordpress:/var/www/html   # sur ubunmac
       - ../secrets:/run/secrets:ro
     ports:
@@ -140,8 +142,8 @@ services:
       - .env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock             # socket de communication avec docker
-      - /home/nfordoxc/data/portainer:/var/lib/portainer      # sur la vm
-      # - portainer_data:/var/lib/portainer                   # sur le mac
+      # - /home/nfordoxc/data/portainer:/var/lib/portainer      # sur la vm
+      - portainer_data:/var/lib/portainer                   # sur le mac
       # - /home/nicostrong/data/portainer:/var/lib/portainer  # sur ubunmac
       - ../secrets:/run/secrets:ro
     ports:
@@ -159,13 +161,28 @@ networks:
   inception_network:
     driver: bridge
 
-# to uncomment on mac
-#volumes:
-#  mariadb_data:
-#    driver: local
-#  wordpress_data:
-#    driver: local
-#  redis_data:
-#    driver: local
-#  portainer_data:
-#    driver: local
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/nfordoxc/data/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/nfordoxc/data/wordpress
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/nfordoxc/data/redis
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/nfordoxc/data/portainer

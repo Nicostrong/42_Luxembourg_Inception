@@ -1,0 +1,11 @@
+sur la vm, il faut creer un user www-data avec le meme groupe puis creer le dossier dataet mettre les droit a chmod -R 775
+
+creer le dossier data
+sudo chown -R 33:33 ./data/
+sudo chmod -R 775 ./data/
+
+sudo rm -dRf mariadb/ wordpress/ redis/ portainer/
+sudo mkdir mariadb wordpress redis portainer
+sudo chmod 775 mariadb wordpress redis portainer
+sudo chown -R 33:33 /home/nfordoxc/data/wordpress
+sudo chown -R www-data:www-data /home/nfordoxc/data/wordpress
