@@ -6,9 +6,7 @@ services:
     env_file:
       - .env
     volumes:
-      # - /home/nfordoxc/data/wordpress:/var/www/html         # dans la vm
-      - wordpress_data:/var/www/html                      # surle mac
-      # - /home/nicostrong/data/wordpress:/var/www/html     # sur le ubunmac
+      - wordpress_data:/var/www/html
       - ../secrets:/run/secrets:ro
     ports:
       - "443:443"
@@ -32,9 +30,7 @@ services:
     env_file:
       - .env 
     volumes:
-      # - /home/nfordoxc/data/wordpress:/var/www/html         # dans la vm
-      - wordpress_data:/var/www/html                      # surle mac
-      # - /home/nicostrong/data/wordpress:/var/www/html     # sur le ubunmac
+      - wordpress_data:/var/www/html
       - ../secrets:/run/secrets:ro
     expose:
       - 9000
@@ -60,9 +56,7 @@ services:
     env_file:
       - .env
     volumes:
-      # - /home/nfordoxc/data/mariadb:/var/lib/mysql        # dans la vm
-      - mariadb_data:/var/lib/mysql                     # sur le mac
-      # - /home/nicostrong/data/mariadb:/var/lib/mysql    # sur ubunmac
+      - mariadb_data:/var/lib/mysql
       - ../secrets:/run/secrets:ro
     expose:
       - 3306
@@ -82,9 +76,7 @@ services:
     env_file:
       - .env
     volumes:
-      # - /home/nfordoxc/data/redis:/data                   # sur la vm
-      - redis_data:/data                                # sur le mac
-      # - /home/nicostrong/data/redis:/data               # sur ubunmac
+      - redis_data:/data
       - ../secrets:/run/secrets:ro
     expose:
       - 6379
@@ -103,9 +95,7 @@ services:
     env_file:
       - .env
     volumes:
-      # - /home/nfordoxc/data/wordpress:/var/www/html       # sur la vm
-      - wordpress_data:/var/www/html                    # sur le mac
-      # - /home/nicostrong/data/wordpress:/var/www/html   # sur ubunmac
+      - wordpress_data:/var/www/html
       - ../secrets:/run/secrets:ro
     ports:
       - "21:21"
@@ -141,10 +131,8 @@ services:
     env_file:
       - .env
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock             # socket de communication avec docker
-      # - /home/nfordoxc/data/portainer:/var/lib/portainer      # sur la vm
-      - portainer_data:/var/lib/portainer                   # sur le mac
-      # - /home/nicostrong/data/portainer:/var/lib/portainer  # sur ubunmac
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/var/lib/portainer
       - ../secrets:/run/secrets:ro
     ports:
       - "9443:9443"
@@ -167,22 +155,26 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/nfordoxc/data/mariadb
+      # device: /home/nfordoxc/data/mariadb               # on VM and UbuMac
+      device: /Users/nicolasfordoxcel/data/mariadb        # on Mac
   wordpress_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/nfordoxc/data/wordpress
+      # device: /home/nfordoxc/data/wordpress             # on VM and UbuMac
+      device: /Users/nicolasfordoxcel/data/wordpress      # on Mac
   redis_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/nfordoxc/data/redis
+      # device: /home/nfordoxc/data/redis                 # on VM and UbuMac
+      device: /Users/nicolasfordoxcel/data/redis          # on Mac
   portainer_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/nfordoxc/data/portainer
+      # device: /home/nfordoxc/data/portainer             # on VM and UbuMac
+      device: /Users/nicolasfordoxcel/data/portainer      # on Mac
