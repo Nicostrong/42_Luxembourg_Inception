@@ -10,6 +10,7 @@ services:
       - ../secrets:/run/secrets:ro
     ports:
       - "443:443"
+      - "8080:8080"
     depends_on:
       wordpress:
         condition: service_healthy
