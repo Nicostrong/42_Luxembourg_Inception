@@ -6,7 +6,7 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:02:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/05 16:38:08 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/07/20 16:45:58 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ body {
 }
 
 .header {
-	background-image:		url("./Dream_Team_42.png");
+	background-image:		url("/images/Dream_Team_42.png");
 	background-size:		cover;
 	background-position:	center;
 	background-repeat:		no-repeat;
@@ -72,6 +72,11 @@ body {
 	padding:				10px 20px;
 }
 
+.navbar a:hover {
+	background-color:		rgba(255, 255, 255, 0.2);
+	border-radius:			5px;
+}
+
 .container {
 	background:				white;
 	padding:				20px;
@@ -82,17 +87,8 @@ body {
 	min-width:				300px;
 	margin:					220px auto;
 	text-align:				left;
-}
-
-.upload-container {
-	background:				white;
-	padding:				20px;
-	border-radius:			10px;
-	box-shadow:				0 4px 8px rgba(0, 0, 0, 0.2);
-	width:					90%;
-	max-width:				600px;
-	margin:					20px auto;
-	text-align:				left;
+	position:				relative;
+	overflow:				hidden;
 }
 
 h1 {
@@ -102,95 +98,40 @@ h1 {
 	margin-bottom:			20px;
 }
 
-.title {
-	color:					blue;
-}
-
-form {
+.personnage {
 	display:				flex;
-	flex-direction:			column;
-	gap:					15px;
+	position:				relative;
+	width:					100%;
+	min-height:				100vh;
 }
 
-label {
-	font-size:				14px;
-	color:					#555;
+.photo {
+	position:				absolute;
+	top:					50px;
+	width:					33.33%;
+	height:					auto;
+	max-height:				calc(100vh - 50px);
+	object-fit:				cover;
+	border-radius:			0 10px 10px 0;
+	box-shadow:				0 4px 8px rgba(0, 0, 0, 0.3);
+	z-index:				1;
 }
 
-input[type="file"] {
-	padding:				10px;
-	border:					1px solid #ddd;
-	border-radius:			5px;
-	cursor:					pointer;
+.photo.gauche {
+	margin-left: 			10px;
+	left:					0;
+	border-radius:			10px 0 0 10px;
 }
 
-input[type="number"] {
-	padding:				10px;
-	border:					1px solid #ddd;
-	border-radius:			5px;
-	cursor:					pointer;
-	width: 					400px;
+.description {
+	margin-left:			33.33%;
+	padding:				40px;
+	flex:					1;
+	overflow-y:				auto;
+	max-height:				calc(100vh - 200px);
+	box-sizing:				border-box;
 }
 
-button {
-	background:				#6e8efb;
-	color:					white;
-	border:					none;
-	padding:				10px;
-	border-radius:			5px;
-	cursor:					pointer;
-	font-size:				16px;
-	transition:				background 0.3s;
-}
-
-button:hover {
-	background:				#4c6ef5;
-}
-
-a:hover {
-	cursor:					help;
-}
-.info {
-	color:					#666;
-	font-style:				italic;
-	margin-top:				15px;
-}
-
-.user-status {
-	background-color:		#e9ecef;
-	padding:				15px;
-	border-radius:			5px;
-	margin-top:				20px;
-}
-
-.anonymous {
-	border-left:			4px solid #ffc107;
-}
-
-.authenticated {
-	border-left:			4px solid #28a745;
-}
-
-.hidden {
-	display:				none;
-}
-
-.visible {
-	display:				block;
-}
-
-.error {
-	display:				flex;
-    flex-direction:			column;
-    justify-content:		center;
-    align-items:			center;
-	background:				white;
-	padding:				20px;
-	border-radius:			10px;
-	box-shadow:				0 4px 8px rgba(0, 0, 0, 0.2);
-	width:					90%;
-	max-width:				1200px;
-	min-width:				300px;
-	margin:					220px auto;
-	text-align:				left;
+.personnage .description h2 {
+	margin-top:				0;
 }

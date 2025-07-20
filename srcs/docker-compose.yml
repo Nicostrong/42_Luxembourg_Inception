@@ -20,7 +20,7 @@ services:
       - inception_network
     restart: always
     healthcheck:
-      test: ["CMD", "curl", "-fs", "http://localhost/ping"]
+      test: ["CMD", "curl", "-fs", "http://localhost:8080/ping"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -121,7 +121,7 @@ services:
       - inception_network
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "curl -fs http://localhost:8080/adminer.php || exit 1"]
+      test: ["CMD-SHELL", "curl -fs http://adminer.nfordoxc.42.fr:8080/adminer.php || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 5
@@ -135,8 +135,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/var/lib/portainer
       - ../secrets:/run/secrets:ro
-    ports:
-      - "9443:9443"
     networks:
       - inception_network
     restart: always
@@ -156,26 +154,26 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      # device: /home/nfordoxc/data/mariadb               # on VM and UbuMac
-      device: /Users/nicolasfordoxcel/data/mariadb        # on Mac
+      device: /home/nfordoxc/data/mariadb               # on VM and UbuMac
+      # device: /Users/nicolasfordoxcel/data/mariadb        # on Mac
   wordpress_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      # device: /home/nfordoxc/data/wordpress             # on VM and UbuMac
-      device: /Users/nicolasfordoxcel/data/wordpress      # on Mac
+      device: /home/nfordoxc/data/wordpress             # on VM and UbuMac
+      # device: /Users/nicolasfordoxcel/data/wordpress      # on Mac
   redis_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      # device: /home/nfordoxc/data/redis                 # on VM and UbuMac
-      device: /Users/nicolasfordoxcel/data/redis          # on Mac
+      device: /home/nfordoxc/data/redis                 # on VM and UbuMac
+      # device: /Users/nicolasfordoxcel/data/redis          # on Mac
   portainer_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      # device: /home/nfordoxc/data/portainer             # on VM and UbuMac
-      device: /Users/nicolasfordoxcel/data/portainer      # on Mac
+      device: /home/nfordoxc/data/portainer             # on VM and UbuMac
+      # device: /Users/nicolasfordoxcel/data/portainer      # on Mac
