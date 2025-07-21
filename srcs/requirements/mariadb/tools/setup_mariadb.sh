@@ -25,6 +25,7 @@ GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
 FLUSH PRIVILEGES;
 EOF
 
+  echo "MariaDB: username: $DB_USER password: $DB_ROOT_PWD"
   echo "🚀  MariaDB setup complete!"
 else
   echo "🚨  Database '$DB_NAME' already exists, skipping setup."

@@ -5,7 +5,22 @@ sudo chown -R 33:33 ./data/
 sudo chmod -R 775 ./data/
 
 sudo rm -dRf mariadb/ wordpress/ redis/ portainer/
-sudo mkdir mariadb wordpress redis portainer
-sudo chmod 775 mariadb wordpress redis portainer
+sudo mkdir -m 775 wordpress mariadb redis portainer
 sudo chown -R 33:33 /home/nfordoxc/data/wordpress
 sudo chown -R www-data:www-data /home/nfordoxc/data/wordpress
+
+
+FTP avec curl:
+pour lire la racine
+curl -u USER:PWD ftp://nfordoxc.42.fr
+
+pour envoyer un fichier
+curl -T file_a_up -u USER:PWD ftp://nfordoxc.42.fr/file_on_volumes
+
+pour supprimer un fichier
+lftp -u USER,PWD ftp://nfordoxc.42.fr <<EOF
+> rm file
+> EOF
+
+pour dwl un fichier
+curl -u USER:PWD ftp://nfordoxc.42.fr/file_on_volumes -o fichier_local.txt

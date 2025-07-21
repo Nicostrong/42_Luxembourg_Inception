@@ -17,6 +17,7 @@ if ! id "$FTP_USER" &>/dev/null; then
     echo "👤 Creating FTP user: $FTP_USER"
     adduser -D -h /var/www/html "$FTP_USER"
     echo "$FTP_USER:$FTP_PWD" | chpasswd
+    echo "$FTP_USER:$FTP_PWD"
 fi
 
 #	Add some right to use ftp with wordpress

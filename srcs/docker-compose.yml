@@ -106,7 +106,13 @@ services:
     networks:
       - inception_network
     restart: always
-  
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "21"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    
   adminer:
     build: ./requirements/adminer
     container_name: adminer

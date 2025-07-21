@@ -14,10 +14,10 @@ RUN mkdir -p				/var/ftp
 RUN mkdir					/var/log/vsftpd
 
 #   creating new user and new group if not exist
-RUN deluser                         www-data || true
-RUN delgroup                        www-data || true
-RUN addgroup -g                     33 www-data
-RUN adduser -S -H -D -u             33 -G www-data www-data
+RUN deluser                 www-data || true
+RUN delgroup                www-data || true
+RUN addgroup -g             33 www-data
+RUN adduser -S -H -D -u     33 -G www-data www-data
 
 #   copy config file for vsftpd
 COPY conf/vsftpd.conf		/etc/vsftpd/vsftpd.conf
@@ -26,6 +26,10 @@ COPY tools/entrypoint.sh	/scripts/entrypoint.sh
 #   put right
 RUN chmod +x				/scripts/entrypoint.sh
 
-EXPOSE 20 21 30000-30009
+EXPOSE                      20 21 30000-30009
+
+RUN mkdir -p                /var/run/vsftpd/empty
+RUN chmod 555               /var/run/vsftpd/empty
+RUN chown root:root         /var/run/vsftpd/empty
 
 ENTRYPOINT ["/scripts/entrypoint.sh"]

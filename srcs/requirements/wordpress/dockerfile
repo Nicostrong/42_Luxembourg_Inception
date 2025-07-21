@@ -1,5 +1,5 @@
 #   os of the container not the latest with php
-FROM php:8.2-fpm-alpine
+FROM alpine:3.21
 
 #   update and upgrade of apk
 RUN apk update && apk upgrade
@@ -22,18 +22,20 @@ RUN apk add --no-cache              re2c
 RUN apk add --no-cache              libxml2-dev
 RUN apk add --no-cache              oniguruma-dev
 RUN apk add --no-cache              libzip-dev
+RUN apk add --no-cache              php82
+RUN apk add --no-cache              php82-fpm
+RUN apk add --no-cache              php82-mysqli
+RUN apk add --no-cache              php82-mbstring
+RUN apk add --no-cache              php82-xml
+RUN apk add --no-cache              php82-session
+RUN apk add --no-cache              php82-zip
+RUN apk add --no-cache              php82-phar
+RUN apk add --no-cache              php82-opcache
+RUN apk add --no-cache              php82-pecl-redis
 
-#   instzlling PHP extensions
-RUN docker-php-ext-install          mysqli
-RUN docker-php-ext-install          mbstring
-RUN docker-php-ext-install          xml
-RUN docker-php-ext-install          session
-RUN docker-php-ext-install          zip
-
-#   installing Redis
-RUN pecl install                    redis
-RUN docker-php-ext-enable           redis
 RUN apk del                         gcc g++ make autoconf libc-dev linux-headers re2c libxml2-dev
+
+RUN ln -s                           /usr/bin/php82 /usr/bin/php
 
 #   installing WP-CLI
 RUN curl -O                         https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -46,9 +48,7 @@ RUN delgroup                        www-data || true
 RUN addgroup -g                     33 www-data
 RUN adduser -S -H -D -u             33 -G www-data www-data
 
-RUN echo "memory_limit = 256M" >> /usr/local/etc/php/php.ini
-
-RUN chmod +x						/usr/local/bin/wp
+RUN echo "memory_limit = 256M" >> /etc/php82/php.ini
 
 RUN mkdir -p						/var/www/html	/scripts
 
@@ -56,6 +56,7 @@ COPY tools/setup_wordpress.sh		/scripts/setup_wordpress.sh
 COPY tools/entrypoint.sh			/scripts/entrypoint.sh
 COPY conf/php-pool.conf				/scripts/php-pool.conf
 
+RUN chmod +x						/usr/local/bin/wp
 RUN chmod +x						/scripts/*.sh
 
 ENTRYPOINT ["/scripts/entrypoint.sh"]
